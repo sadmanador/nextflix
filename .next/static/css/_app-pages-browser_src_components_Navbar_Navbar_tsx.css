@@ -1,0 +1,194 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[9].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[9].use[5]!./src/styles/Navbar.module.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+.Navbar_navBar__OTxKP {
+  background-image: linear-gradient(to bottom, rgba(20, 20, 20, 0.7019607843) 10%, rgba(0, 0, 0, 0));
+  transition: all 0.2s ease-out;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  position: -webkit-sticky;
+  position: sticky;
+  padding: 0.8rem;
+  top: 0;
+  overflow: hidden;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__OTxKP {
+    padding: 0.6rem 0rem;
+  }
+}
+.Navbar_navBar__filled__Qmz7Q {
+  background-image: none;
+  background-color: #141414;
+  transition: all 0.2s ease-out;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  position: -webkit-sticky;
+  position: sticky;
+  padding: 0.8rem;
+  top: 0;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__filled__Qmz7Q {
+    padding: 0.6rem 0rem;
+  }
+}
+.Navbar_navBar__left__KeTR6 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 3rem;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__left__KeTR6 {
+    margin-left: 2rem;
+  }
+}
+.Navbar_navBar__left__KeTR6 .Navbar_browse__DBXQT {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+}
+.Navbar_navBar__left__KeTR6 .Navbar_options__nl5aT {
+  padding: 0.4rem 0.3rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  transition: linear 200ms ease-in;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__left__KeTR6 .Navbar_options__nl5aT {
+    margin: 0 0.2rem;
+  }
+}
+.Navbar_navBar__left__KeTR6 .Navbar_options__nl5aT:hover {
+  color: #e5e5e5;
+}
+.Navbar_navBar__left__KeTR6 .Navbar_menu__0D_Br {
+  background-color: #141414;
+  opacity: 0.7 !important;
+  color: #fff;
+  position: absolute;
+  top: 3rem;
+  padding: 0.6rem 0.9rem;
+  margin-left: 6rem;
+  border: rgba(255, 255, 255, 0.5019607843) solid 1.5px;
+  cursor: pointer;
+}
+.Navbar_navBar__left__KeTR6 .Navbar_menu__0D_Br:hover {
+  border-color: #fff;
+}
+.Navbar_navBar__right__8jCJx {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 2rem;
+  z-index: 50;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__right__8jCJx {
+    margin-right: 0.4rem;
+  }
+}
+.Navbar_navBar__right__8jCJx .Navbar_options__nl5aT {
+  padding: 0.3rem;
+  margin: 0 0.2rem;
+  cursor: pointer;
+  transition: linear 200ms ease-in;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__right__8jCJx .Navbar_options__nl5aT {
+    padding: 0.1rem;
+    margin: 0;
+  }
+}
+.Navbar_navBar__right__8jCJx .Navbar_options__nl5aT:hover {
+  color: #e5e5e5;
+}
+.Navbar_navBar__right__8jCJx .Navbar_icon__ULRbz {
+  font-size: 1.4rem;
+  margin: 0 0.7rem;
+  cursor: pointer;
+  transition: linear 250ms ease-in-out;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__right__8jCJx .Navbar_icon__ULRbz {
+    margin: 0 0.3rem;
+  }
+}
+.Navbar_navBar__right__8jCJx .Navbar_icon__ULRbz:hover {
+  transform: translateY(-1px);
+}
+.Navbar_navBar__right__8jCJx .Navbar_searchPanel__10XZZ {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.Navbar_navBar__right__8jCJx .Navbar_searchBar__wN_e7 {
+  background-color: #141414;
+  border: #e5e5e5 solid 1.2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.Navbar_navBar__right__8jCJx .Navbar_searchBar__input__jV_Ic {
+  padding: 0.4rem;
+  outline: none;
+  border-radius: 0;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__right__8jCJx .Navbar_searchBar__input__jV_Ic {
+    width: 90%;
+    overflow: hidden;
+    padding: 0.3rem;
+  }
+}
+.Navbar_navBar__right__8jCJx .Navbar_profile__ADHI7 {
+  padding: 0 0.9rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  cursor: pointer;
+}
+.Navbar_navBar__right__8jCJx .Navbar_profile__ADHI7 .Navbar_user__YawtS {
+  height: 2rem;
+  border-radius: 0.2rem;
+  margin-right: 0.3rem;
+  cursor: pointer;
+}
+@media only screen and (max-width: 640px) and (orientation: portrait) {
+  .Navbar_navBar__right__8jCJx .Navbar_profile__ADHI7 .Navbar_user__YawtS {
+    height: 1.7rem;
+  }
+}
+.Navbar_navBar__right__8jCJx .Navbar_profile__ADHI7 .Navbar_signout__bFm_u {
+  background-color: #141414;
+  opacity: 0.7;
+  color: #fff;
+  position: absolute;
+  margin-top: 6rem;
+  padding: 0.6rem 0.9rem;
+  right: 8;
+  border: rgba(255, 255, 255, 0.5019607843) solid 1.5px;
+  cursor: pointer;
+  z-index: 40;
+}
+.Navbar_navBar__right__8jCJx .Navbar_profile__ADHI7 .Navbar_signout__bFm_u:hover {
+  border-color: #fff;
+}

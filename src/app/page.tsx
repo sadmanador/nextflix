@@ -1,95 +1,85 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import Banner from "@/components/Banner/Banner";
+import Layout from "@/components/Layout/Layout";
+import Modal from "@/components/Modal";
+import { MovieSections } from "@/components/MovieSections/MovieSections";
+import { ModalContext } from "@/context/ModalContext";
+import { Section } from "@/types";
+import { useContext } from "react";
+import styles from '../styles/Browse.module.scss';
+
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { isModal } = useContext(ModalContext);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  return (
+    <>
+      {isModal && <Modal />}
+      <Layout>
+        <Banner />
+        <div className={styles.contentContainer}>
+          {sections.map((item, index) => {
+            return (
+              <MovieSections
+                key={index}
+                heading={item.heading}
+                endpoint={item.endpoint}
+                defaultCard={item?.defaultCard}
+                topList={item?.topList}
+              />
+            );
+          })}
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </Layout>
+    </>
   );
 }
+
+const sections: Section[] = [
+  {
+    heading: "Popular on Nextflix",
+    endpoint: "/tv/popular?language=en-US&page=1",
+  },
+  {
+    heading: "Horror Movies",
+    endpoint: "/discover/movie?with_genres=27&language=en-US&page=1",
+  },
+  {
+    heading: "Only on Nextflix",
+    endpoint: "/discover/tv?language=en-US&page=1",
+    defaultCard: false,
+  },
+  {
+    heading: "Trending Now",
+    endpoint: "/trending/movie/week?language=en-US&page=1",
+  },
+  {
+    heading: "Comedies",
+    endpoint: "/discover/movie?with_genres=35&language=en-US&page=1",
+  },
+  {
+    heading: "Top 10 in US Today",
+    endpoint: "/trending/tv/day?language=en-US&page=1",
+    topList: true,
+  },
+  {
+    heading: "Action",
+    endpoint: "/discover/movie?with_genres=28&language=en-US&page=1",
+  },
+  {
+    heading: "TV Sci-Fi and Horror",
+    endpoint: "/discover/tv?with_genres=10765&language=en-US&page=1",
+  },
+  {
+    heading: "Mystery Movies",
+    endpoint: "/discover/movie?with_genres=9648&language=en-US&page=1",
+  },
+  {
+    heading: "Animation",
+    endpoint: "/discover/tv?with_genres=16&language=en-US&page=1",
+  },
+  {
+    heading: "Drama",
+    endpoint: "/discover/movie?with_genres=18&language=en-US&page=1",
+  },
+];
