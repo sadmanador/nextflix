@@ -69,7 +69,7 @@ export default function Banner() {
       {trailerKey ? (
         <div className={styles.videoWrapper}>
           <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&loop=1`}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&loop=1&modestbranding=1&showinfo=0`}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
             allowFullScreen
