@@ -1,6 +1,23 @@
-@import './variables.scss';
-@import './mixins.scss';
+@import "./variables.scss";
+@import "./mixins.scss";
 
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%; /* 16:9 aspect ratio */
+  overflow: hidden;
+}
+
+.spotlight__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the video fills the container and removes black bars */
+  display: block;
+}
 
 .spotlight {
   position: relative;
@@ -10,40 +27,6 @@
   @include for-mobile-only {
     height: 64vh; // Adjust height for mobile devices
   }
-
-
-  &__videoContainer {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; // Hide overflow
-  }
-  
-  &__videoContainer iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;    // Full viewport width
-    height: 100vh;   // Full viewport height
-    min-width: 100%; // Ensure it covers the container
-    min-height: 100%; // Ensure it covers the container
-    transform: translate(-50%, -50%); // Center the iframe
-    border: none; // Remove any default border
-  }
-
-  &__image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; 
-    object-fit: cover;
-    z-index: 0; 
-  }
-
-
-
-
 
   &__details {
     position: absolute;

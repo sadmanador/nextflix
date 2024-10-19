@@ -10,7 +10,6 @@ import Image from "next/image";
 
 const axios = getInstance();
 
-
 export default function Banner() {
   const [media, setMedia] = useState<Media | null>(null);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
@@ -21,7 +20,7 @@ export default function Banner() {
     setIsModal(true);
   };
 
-  console.log("Banner",media)
+  console.log("Banner", media);
 
   useEffect(() => {
     const getMedia = async () => {
@@ -68,19 +67,20 @@ export default function Banner() {
   return (
     <div className={styles.spotlight}>
       {trailerKey ? (
-        <div className={styles.spotlight__videoContainer}>
+        <div className={styles.videoWrapper}>
           <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&playsinline=1`}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0`}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
             allowFullScreen
+            className={styles.spotlight__video}
           ></iframe>
         </div>
       ) : (
         media && (
           <Image
             width={1280}
-            height={920}
+            height={720}
             src={`https://image.tmdb.org/t/p/original${media.backdrop_path}`}
             alt="spotlight"
             className={styles.spotlight__image}
@@ -88,7 +88,7 @@ export default function Banner() {
         )
       )}
       <div className={styles.spotlight__details}>
-        <div className={styles.title}>{media?.title || media?.title}</div>
+        <div className={styles.title}>{media?.title || media?.name}</div>
         <div className={styles.synopsis}>
           {media?.overview?.slice(0, 100) + "..." ||
             "No description available."}
