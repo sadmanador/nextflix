@@ -9,6 +9,8 @@ import Image from "next/image";
 import Button from "../Button";
 import handleAddToLocalStorage from "@/utils/localStorage";
 
+const axios = getInstance();
+
 interface TopMoviesProps {
   item: Media;
   myList: boolean;
@@ -17,8 +19,6 @@ interface TopMoviesProps {
 export default function TopMovies({
   item,
 }: TopMoviesProps): React.ReactElement {
-  const axios = getInstance();
-
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
@@ -31,6 +31,8 @@ export default function TopMovies({
     setModalData(data);
     setIsModal(true);
   };
+
+  console.log("Top Movies", trailerKey);
 
   useEffect(() => {
     const fetchTrailer = async () => {

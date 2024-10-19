@@ -6,6 +6,8 @@ import FeaturedCard from "../FeaturedCard/FeaturedCard";
 import Cards from "../Cards/Cards";
 import styles from "../../styles/Cards.module.scss";
 
+const axios = getInstance(); 
+
 interface MovieSectionProps {
   defaultCard?: boolean;
   heading: string;
@@ -13,7 +15,6 @@ interface MovieSectionProps {
   endpoint: string;
 }
 
-const axios = getInstance(); 
 
 export const MovieSections: React.FC<MovieSectionProps> = ({
   defaultCard = true,
@@ -23,7 +24,9 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
 }) => {
   const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true); 
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
+
+  console.log("Movie Section",media)
 
   useEffect(() => {
     const fetchMovies = async () => {

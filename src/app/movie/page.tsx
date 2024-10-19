@@ -13,6 +13,8 @@ const MoviePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("Movie",movies)
+
   useEffect(() => {
     const fetchTopRatedMovies = async () => {
       try {

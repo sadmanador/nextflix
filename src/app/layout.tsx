@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/f.ico" />
+        <link rel="icon" type="image/x-icon" href="/f.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ModalProvider>{children}</ModalProvider>

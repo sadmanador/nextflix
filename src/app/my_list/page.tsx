@@ -14,6 +14,8 @@ const MyListPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("My List",movies)
+
   useEffect(() => {
     const fetchFavoritesFromLocalStorage = async () => {
       try {

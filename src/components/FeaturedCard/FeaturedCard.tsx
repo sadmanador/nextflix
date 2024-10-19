@@ -8,6 +8,8 @@ import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
 
+const axios = getInstance();
+
 interface FeatureCardProps {
   index: number;
   item: Media;
@@ -36,8 +38,6 @@ export default function FeatureCard({
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const axios = getInstance();
-
   const { setModalData, setIsModal } = useContext(ModalContext);
 
   const onClick = (data: Media) => {
@@ -46,14 +46,16 @@ export default function FeatureCard({
   };
 
   const onHover = () => {
-    setIsHovered(true); 
+    setIsHovered(true);
     setImage(`https://image.tmdb.org/t/p/original${backdrop_path}`);
   };
 
   const onMouseOut = () => {
-    setIsHovered(false); 
+    setIsHovered(false);
     setImage(`https://image.tmdb.org/t/p/original${poster_path}`);
   };
+
+  console.log("Featured Cards", genres, trailerKey);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -69,10 +71,6 @@ export default function FeatureCard({
       }
     };
 
-    fetchGenres();
-  });
-
-  useEffect(() => {
     const fetchTrailer = async () => {
       try {
         const response = await axios.get(`/tv/${id}/videos`, {
@@ -92,20 +90,21 @@ export default function FeatureCard({
     if (isHovered) {
       fetchTrailer();
     }
-  });
+
+    fetchGenres();
+  }, [isHovered, id]);
 
   return (
     <div className={styles.container}>
       <div className={styles.rank}>{index}</div>
 
-      <div 
+      <div
         className={styles.featureCard}
-        onMouseEnter={onHover} 
-        onMouseLeave={onMouseOut} 
+        onMouseEnter={onHover}
+        onMouseLeave={onMouseOut}
       >
         {isHovered && trailerKey ? (
           <iframe
-
             src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0`}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

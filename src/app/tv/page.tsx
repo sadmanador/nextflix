@@ -6,12 +6,15 @@ import styles from "../../styles/TopRatedMoviesPage.module.scss";
 import TopMovies from "@/components/TopMovies/TopMovies";
 import Layout from "@/components/Layout/Layout";
 
+
 const axios = getInstance();
 
 const TVshowPage: React.FC = () => {
   const [movies, setMovies] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+console.log("TV",movies)
 
   useEffect(() => {
     const fetchTopRatedMovies = async () => {

@@ -9,6 +9,8 @@ import Button from "../Button";
 import Image from "next/image";
 import handleAddToLocalStorage from "@/utils/localStorage";
 
+const axios = getInstance();
+
 interface CardsProps {
   defaultCard?: boolean;
   item: Media;
@@ -18,7 +20,6 @@ export default function Cards({
   defaultCard = true,
   item,
 }: CardsProps): React.ReactElement {
-  const axios = getInstance();
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
@@ -46,6 +47,9 @@ export default function Cards({
     setIsModal(true);
   };
 
+  console.log("Cards genres", genres);
+  console.log("Cards trailers", trailerKey);
+
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -61,7 +65,7 @@ export default function Cards({
     };
 
     fetchGenres();
-  });
+  }, []);
 
   useEffect(() => {
     const fetchTrailer = async () => {
@@ -83,7 +87,7 @@ export default function Cards({
     if (isHovered) {
       fetchTrailer();
     }
-  });
+  }, [isHovered, id]);
 
   return (
     <div
@@ -116,11 +120,11 @@ export default function Cards({
               Icon={Add}
               rounded
               onClick={() => {
-                const mediaType = title ? "movie" : "tv"; 
+                const mediaType = title ? "movie" : "tv";
                 const mediaItem: MediaItem = {
                   id,
                   type: mediaType,
-                  title: title || name, 
+                  title: title || name,
                 };
                 handleAddToLocalStorage(mediaItem);
               }}

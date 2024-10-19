@@ -6,7 +6,9 @@ import { Play, Add, Like, Dislike } from "../../utils/icons";
 import Button from "../Button";
 import { Media, Genre } from "../../types";
 import Image from "next/image";
-import getInstance from "@/utils/axio"; // Ensure you import axios instance
+import getInstance from "@/utils/axio";
+
+const axios = getInstance();
 
 function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
   const genreMap = genres.reduce(
@@ -16,15 +18,11 @@ function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
     },
     {}
   );
-  
 
-  return genre_ids
-    .map((id) => genreMap[id])
-    .filter((name) => name); 
+  return genre_ids.map((id) => genreMap[id]).filter((name) => name);
 }
 
 export default function Modal() {
-  const axios = getInstance(); 
   const [genres, setGenres] = useState<Genre[]>([]);
   const { modalData, setIsModal, isModal } = useContext(ModalContext);
 
@@ -43,6 +41,8 @@ export default function Modal() {
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
     : `https://image.tmdb.org/t/p/original${poster_path}`;
 
+  console.log("Modal", genres);
+
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -58,7 +58,7 @@ export default function Modal() {
     };
 
     fetchGenres();
-  }); 
+  });
 
   return (
     <div
@@ -83,7 +83,9 @@ export default function Modal() {
               <Button Icon={Like} rounded />
               <Button Icon={Dislike} rounded />
             </div>
-            <div className={styles.greenText}>{Math.round(vote_average * 10)}% Match</div>
+            <div className={styles.greenText}>
+              {Math.round(vote_average * 10)}% Match
+            </div>
           </div>
         </div>
 

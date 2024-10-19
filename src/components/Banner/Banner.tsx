@@ -8,8 +8,10 @@ import styles from "../../styles/Banner.module.scss";
 import getInstance from "@/utils/axio";
 import Image from "next/image";
 
+const axios = getInstance();
+
+
 export default function Banner() {
-  const axios = getInstance();
   const [media, setMedia] = useState<Media | null>(null);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
@@ -18,6 +20,8 @@ export default function Banner() {
     setModalData(data);
     setIsModal(true);
   };
+
+  console.log("Banner",media)
 
   useEffect(() => {
     const getMedia = async () => {
