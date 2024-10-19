@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Banner from "@/components/Banner/Banner";
 import Layout from "@/components/Layout/Layout";
 import Modal from "@/components/Modal/Modal";
@@ -6,8 +6,7 @@ import { MovieSections } from "@/components/MovieSections/MovieSections";
 import { ModalContext } from "@/context/ModalContext";
 import { Section } from "@/types";
 import { useContext } from "react";
-import styles from '../styles/Browse.module.scss';
-
+import styles from "../styles/Browse.module.scss";
 
 export default function Home() {
   const { isModal } = useContext(ModalContext);
@@ -37,6 +36,11 @@ export default function Home() {
 
 const sections: Section[] = [
   {
+    heading: "Top 10 Movies in US Today",
+    endpoint: "/trending/movie/day?language=en-US&page=1",
+    topList: true,
+  },
+  {
     heading: "Popular on Nextflix",
     endpoint: "/tv/popular?language=en-US&page=1",
   },
@@ -49,6 +53,7 @@ const sections: Section[] = [
     endpoint: "/discover/tv?language=en-US&page=1",
     defaultCard: false,
   },
+
   {
     heading: "Trending Now",
     endpoint: "/trending/movie/week?language=en-US&page=1",
@@ -58,7 +63,7 @@ const sections: Section[] = [
     endpoint: "/discover/movie?with_genres=35&language=en-US&page=1",
   },
   {
-    heading: "Top 10 in US Today",
+    heading: "Top 10 TV Shows in US Today",
     endpoint: "/trending/tv/day?language=en-US&page=1",
     topList: true,
   },

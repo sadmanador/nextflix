@@ -57,8 +57,6 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
   return (
     <div className={styles.listContainer}>
       <strong className={styles.category}>{heading}</strong>
-
-
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
