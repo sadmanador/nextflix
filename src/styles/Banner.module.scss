@@ -1,11 +1,10 @@
 @import "./variables.scss";
 @import "./mixins.scss";
-
 .videoWrapper {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 50%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%; // For 16:9 aspect ratio
   overflow: hidden;
 }
 
@@ -15,42 +14,41 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the video fills the container and removes black bars */
+  border: none; // Remove any border
   display: block;
 }
 
 .spotlight {
   position: relative;
   width: 100%;
-  height: 88vh; // Set the height for the container (viewport height)
+  height: 88vh;
 
   @include for-mobile-only {
-    height: 64vh; // Adjust height for mobile devices
+    height: 64vh;
   }
 
   &__details {
     position: absolute;
-    z-index: 10; // Layer the details on top of the video/image
+    z-index: 10;
     width: 35%;
     margin-left: 3.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
-    bottom: 25%; // Position details slightly above the bottom
+    bottom: 25%; 
 
     @include for-mobile-only {
       width: 75%;
       justify-content: center;
       text-align: center;
       margin-left: 0;
-      bottom: 2rem; // Adjust for mobile
+      bottom: 2rem; 
     }
 
     .title {
       font-weight: 600;
       padding: 0.4rem;
-
       @include fluid-type(2.2rem, 2.8rem);
     }
 
@@ -61,7 +59,6 @@
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-
       @include fluid-type(0.9rem, 1.3rem);
     }
 
