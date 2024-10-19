@@ -1,6 +1,7 @@
-"use client"
-import React, { createContext, useState } from 'react';
-import { Media } from '../types';
+"use client";
+import React, { createContext, useState } from "react";
+import { Media } from "../types";
+
 
 interface Modal {
   modalData: Media;
@@ -10,14 +11,27 @@ interface Modal {
 }
 
 interface ModalProviderProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export const ModalContext = createContext<Modal>({} as Modal);
+
+export const ModalContext = createContext<Modal>({
+  modalData: {} as Media,
+  setModalData: () => {}, 
+  isModal: false,
+  setIsModal: () => {}, 
+});
 
 export function ModalProvider({ children }: ModalProviderProps) {
   const [modalData, setModalData] = useState<Media>({} as Media);
   const [isModal, setIsModal] = useState<boolean>(false);
 
-  return <ModalContext.Provider value={{ modalData, setModalData, isModal, setIsModal }}>{children}</ModalContext.Provider>;
+
+  return (
+    <ModalContext.Provider
+      value={{ modalData, setModalData, isModal, setIsModal }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
 }

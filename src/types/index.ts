@@ -47,3 +47,11 @@ export type Section = {
   defaultCard?: boolean;
   topList?: boolean;
 };
+
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+}

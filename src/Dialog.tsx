@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { MutableRefObject } from 'react';
-import useExternalClick from '../hooks/useExternalClick';
+import useExternalClick from './hooks/useExternalClick';
+
 
 interface DialogProps {
   visible: boolean;

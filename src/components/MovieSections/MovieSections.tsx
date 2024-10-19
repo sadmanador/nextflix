@@ -13,6 +13,8 @@ interface MovieSectionProps {
   endpoint: string;
 }
 
+const axios = getInstance(); // Move axios instance outside the component
+
 export const MovieSections: React.FC<MovieSectionProps> = ({
   defaultCard = true,
   heading,
@@ -22,39 +24,37 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
   const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
-  const axios = getInstance();
 
-  // Function to fetch the data
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchMovies = async () => {
-    try {
-      setLoading(true); // Set loading to true before fetching
-      const response = await axios.get(`${endpoint}`, {
-        params: {
-          api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-        },
-      });
-
-      setMedia(response.data.results);
-    } catch (error) {
-      setError("Error fetching movies");
-      console.error("Error fetching movies:", error);
-    } finally {
-      setLoading(false); // Set loading to false after fetching
-    }
-  };
-
-  // useEffect to trigger fetch only when endpoint changes
   useEffect(() => {
-    if (endpoint) {
+    const fetchMovies = async () => {
+      try {
+        setLoading(true); // Set loading to true before fetching
+        const response = await axios.get(`${endpoint}`, {
+          params: {
+            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
+          },
+        });
+
+        setMedia(response.data.results);
+      } catch (error) {
+        setError("Error fetching movies");
+        console.error("Error fetching movies:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
+    };
+
+    if (media.length === 0) {
       fetchMovies();
     }
-  }, [endpoint, fetchMovies]); // Only re-fetch when endpoint changes
+  }, [endpoint, media.length]);
+
+
 
   return (
     <div className={styles.listContainer}>
       <strong className={styles.category}>{heading}</strong>
-      
+
       {/* Display loading state while data is being fetched */}
       {loading ? (
         <div>Loading...</div> // Add your loading spinner or placeholder here

@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { Genre, Media } from "../../types";
+import { Genre, Media, Video } from "../../types";
 import styles from "../../styles/Cards.module.scss";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
@@ -13,23 +13,28 @@ interface CardsProps {
   item: Media;
 }
 
+
+
 export default function Cards({
   defaultCard = true,
   item,
 }: CardsProps): React.ReactElement {
   const axios = getInstance();
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [isHovered, setIsHovered] = useState(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  
   const style = defaultCard ? styles.card : styles.longCard;
   const infoStyle = defaultCard ? styles.cardInfo : styles.more;
 
-  const { title, poster_path, backdrop_path, vote_average, genre_ids } = item;
+  const { title, poster_path, backdrop_path, vote_average, genre_ids, id } = item; // Added id for fetching trailer
   const image = defaultCard
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
     : `https://image.tmdb.org/t/p/original${poster_path}`;
 
   const { setModalData, setIsModal } = useContext(ModalContext);
 
-  const onClick = (data: Media) => {
+  const onClickModal = (data: Media) => {
     setModalData(data);
     setIsModal(true);
   };
@@ -49,17 +54,51 @@ export default function Cards({
     };
 
     fetchGenres();
-  }, [axios]);
+  }, []);
+
+  useEffect(() => {
+    const fetchTrailer = async () => {
+      try {
+        const response = await axios.get(`/movie/${id}/videos`, {
+          params: {
+            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
+          },
+        });
+        const trailer = response.data.results.find((video: Video) => video.type === "Trailer");
+        setTrailerKey(trailer ? trailer.key : null);
+      } catch (error) {
+        console.log("Error fetching trailer:", error);
+      }
+    };
+
+    if (isHovered) {
+      fetchTrailer();
+    }
+  }, [isHovered, id]);
 
   return (
-    <div className={style}>
-      <Image
-        width={450}
-        height={350}
-        src={image}
-        alt="img"
-        className={styles.cardPoster}
-      />
+    <div 
+      className={style}
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {isHovered && trailerKey ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowFullScreen
+          className={styles.cardPoster}
+        ></iframe>
+      ) : (
+        <Image
+          width={450}
+          height={350}
+          src={image}
+          alt="img"
+          className={styles.cardPoster}
+        />
+      )}
       <div className={infoStyle}>
         <div className={styles.actionRow}>
           <div className={styles.actionRow}>
@@ -72,14 +111,12 @@ export default function Cards({
               </>
             )}
           </div>
-          <Button Icon={Down} rounded onClick={() => onClick(item)} />
+          <Button Icon={Down} rounded onClick={() => onClickModal(item)} />
         </div>
         <div className={styles.textDetails}>
           <strong>{title}</strong>
           <div className={styles.row}>
-            <span className={styles.greenText}>{`${
-              vote_average * 10
-            }% match`}</span>
+            <span className={styles.greenText}>{`${Math.round(vote_average * 10)}% match`}</span>
           </div>
           {renderGenre(genre_ids, genres)}
         </div>
@@ -97,7 +134,6 @@ function renderGenre(genre_ids: number[], genres: Genre[]) {
     {}
   );
 
-  // Filter out any genres that do not have a corresponding name in the genreMap
   const validGenres = genre_ids.filter((id) => genreMap[id]);
 
   return (

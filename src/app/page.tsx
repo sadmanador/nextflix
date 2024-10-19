@@ -1,7 +1,7 @@
 "use client"
 import Banner from "@/components/Banner/Banner";
 import Layout from "@/components/Layout/Layout";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 import { MovieSections } from "@/components/MovieSections/MovieSections";
 import { ModalContext } from "@/context/ModalContext";
 import { Section } from "@/types";

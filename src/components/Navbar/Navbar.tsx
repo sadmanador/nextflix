@@ -1,14 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
-import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
 
+import { motion } from 'framer-motion';
 import { Notifications } from '../../utils/icons';
 import useDimensions from '../../hooks/useDimensions';
 import styles from '../../styles/Navbar.module.scss';
+import Menu from './Menu';
+import SearchBar from './SearchBar';
+import Profile from './Profile';
 
-const Profile = dynamic(import('./Profile'));
-const SearchBar = dynamic(import('./SearchBar'));
-const Menu = dynamic(import('./Menu'));
 
 interface NavbarProps {
   isScrolled: boolean;

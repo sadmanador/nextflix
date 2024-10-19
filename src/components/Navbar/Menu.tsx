@@ -1,15 +1,15 @@
 "use client"
 import { useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-
 import { Maybe } from '../../types';
 import { CaretDown } from '../../utils/icons';
 import styles from '../../styles/Navbar.module.scss';
 import useDimensions from '../../hooks/useDimensions';
+import Dialog from '@/Dialog';
+import Link from 'next/link';
 
-const Dialog = dynamic(import('../Dialog'))
+
 
 const browseList = ['Home', 'TV Shows', 'Movies', 'New & Popular', 'My List'];
 
@@ -60,11 +60,15 @@ export default function Menu() {
           </Dialog>
         </>
       ) : (
-        browseList.map((item, index) => (
-          <div key={index} className={styles.options}>
-            {item}
-          </div>
-        ))
+       
+          <>
+          <Link className={styles.options} href={'/'}>Home</Link>
+          <Link className={styles.options} href={'#'}>TV Shows</Link>
+          <Link className={styles.options} href={'/my_list'}>Movies</Link>
+          <Link className={styles.options} href={'#'}>New & Popular</Link>
+          <Link className={styles.options} href={'#'}>My List</Link>
+          </>
+ 
       )}
     </>
   );
