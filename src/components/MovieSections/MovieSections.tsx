@@ -13,6 +13,7 @@ interface MovieSectionProps {
   heading: string;
   topList?: boolean;
   endpoint: string;
+  mediaType: string;
 }
 
 
@@ -21,6 +22,7 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
   heading,
   topList = false,
   endpoint,
+  mediaType
 }) => {
   const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true); 
@@ -71,12 +73,12 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
               if (topList) {
                 if (index < 10) {
                   return (
-                    <FeaturedCard key={index} index={index + 1} item={item} />
+                    <FeaturedCard key={index} index={index + 1} item={item} mediaType={mediaType}/>
                   );
                 }
               } else {
                 return (
-                  <Cards key={index} defaultCard={defaultCard} item={item} />
+                  <Cards key={index} defaultCard={defaultCard} item={item} mediaType={mediaType}/>
                 );
               }
             })}

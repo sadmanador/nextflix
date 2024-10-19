@@ -48,6 +48,7 @@ export type Section = {
   endpoint: string;
   defaultCard?: boolean;
   topList?: boolean;
+  mediaType: "movie" | "tv"
 };
 
 export interface Video {

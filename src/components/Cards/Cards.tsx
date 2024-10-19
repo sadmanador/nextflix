@@ -14,11 +14,13 @@ const axios = getInstance();
 interface CardsProps {
   defaultCard?: boolean;
   item: Media;
+  mediaType: string
 }
 
 export default function Cards({
   defaultCard = true,
   item,
+  mediaType
 }: CardsProps): React.ReactElement {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
@@ -36,6 +38,7 @@ export default function Cards({
     id,
     name,
   } = item;
+
   const image = defaultCard
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
     : `https://image.tmdb.org/t/p/original${poster_path}`;
@@ -70,7 +73,7 @@ export default function Cards({
   useEffect(() => {
     const fetchTrailer = async () => {
       try {
-        const response = await axios.get(`/movie/${id}/videos`, {
+        const response = await axios.get(`/${mediaType}/${id}/videos`, {
           params: {
             api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
           },

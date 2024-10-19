@@ -13,11 +13,13 @@ const axios = getInstance();
 interface FeatureCardProps {
   index: number;
   item: Media;
+  mediaType: string;
 }
 
 export default function FeatureCard({
   index,
   item,
+  mediaType,
 }: FeatureCardProps): React.ReactElement {
   const {
     title,
@@ -60,7 +62,7 @@ export default function FeatureCard({
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await axios.get("/genre/movie/list", {
+        const response = await axios.get(`/genre/${mediaType}/list`, {
           params: {
             api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
           },
@@ -73,7 +75,7 @@ export default function FeatureCard({
 
     const fetchTrailer = async () => {
       try {
-        const response = await axios.get(`/tv/${id}/videos`, {
+        const response = await axios.get(`/${mediaType}/${id}/videos`, {
           params: {
             api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
           },
@@ -92,7 +94,7 @@ export default function FeatureCard({
     }
 
     fetchGenres();
-  }, [isHovered, id]);
+  }, [isHovered, id, mediaType]);
 
   return (
     <div className={styles.container}>
