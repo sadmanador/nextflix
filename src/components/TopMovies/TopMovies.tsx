@@ -1,25 +1,28 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { Genre, Media, Video } from "../../types";
+import { Media, MediaItem, Video } from "../../types";
 import styles from "../../styles/Cards.module.scss";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
 import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
-import { style } from "framer-motion/client";
+import handleAddToLocalStorage from "@/utils/localStorage";
 
 interface TopMoviesProps {
   item: Media;
+  myList: boolean;
 }
 
-export default function TopMovies({ item }: TopMoviesProps): React.ReactElement {
+export default function TopMovies({
+  item,
+}: TopMoviesProps): React.ReactElement {
   const axios = getInstance();
-  const [genres, setGenres] = useState<Genre[]>([]);
+
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
-  const { title, poster_path, backdrop_path, vote_average, genre_ids, id } = item;
+  const { title, poster_path, vote_average, id, name } = item;
   const image = `https://image.tmdb.org/t/p/original${poster_path}`;
 
   const { setModalData, setIsModal } = useContext(ModalContext);
@@ -30,23 +33,6 @@ export default function TopMovies({ item }: TopMoviesProps): React.ReactElement 
   };
 
   useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await axios.get("/genre/movie/list", {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        setGenres(response.data.genres);
-      } catch (error) {
-        console.log("Error fetching genres:", error);
-      }
-    };
-
-    fetchGenres();
-  }, []);
-
-  useEffect(() => {
     const fetchTrailer = async () => {
       try {
         const response = await axios.get(`/movie/${id}/videos`, {
@@ -54,7 +40,9 @@ export default function TopMovies({ item }: TopMoviesProps): React.ReactElement 
             api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
           },
         });
-        const trailer = response.data.results.find((video: Video) => video.type === "Trailer");
+        const trailer = response.data.results.find(
+          (video: Video) => video.type === "Trailer"
+        );
         setTrailerKey(trailer ? trailer.key : null);
       } catch (error) {
         console.log("Error fetching trailer:", error);
@@ -64,12 +52,12 @@ export default function TopMovies({ item }: TopMoviesProps): React.ReactElement 
     if (isHovered) {
       fetchTrailer();
     }
-  }, [isHovered, id]);
+  });
 
   return (
-    <div 
+    <div
       className={styles.longCard}
-      onMouseEnter={() => setIsHovered(true)} 
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {isHovered && trailerKey ? (
@@ -91,49 +79,75 @@ export default function TopMovies({ item }: TopMoviesProps): React.ReactElement 
       )}
       <div className={styles.more}>
         <div className={styles.actionRow}>
-          <div className={styles.actionRow}>
-            <Button Icon={Play} rounded filled />
-            <Button Icon={Add} rounded />
-            <Button Icon={Like} rounded />
-            <Button Icon={Dislike} rounded />
-          </div>
+          <Button Icon={Play} rounded filled />
+          <Button
+            Icon={Add}
+            rounded
+            onClick={() => {
+              const mediaType = title ? "movie" : "tv";
+              const mediaItem: MediaItem = {
+                id,
+                type: mediaType,
+                title: title || name,
+              };
+              handleAddToLocalStorage(mediaItem);
+            }}
+          />
+
+          <Button Icon={Like} rounded />
+          <Button Icon={Dislike} rounded />
           <Button Icon={Down} rounded onClick={() => onClickModal(item)} />
         </div>
         <div className={styles.textDetails}>
-          <strong className={style.title} style={{color: "white",  fontSize:"16px"}}>{title}</strong>
+          <strong style={{ color: "white", fontSize: "16px" }}>
+            {title || name}
+          </strong>
           <div className={styles.row}>
-            <span className={styles.greenText}>{`${Math.round(vote_average * 10)}% match`}</span>
+            <span className={styles.greenText}>{`${Math.round(
+              vote_average * 10
+            )}% match`}</span>
           </div>
-          {renderGenre(genre_ids, genres)}
+          {/* {renderGenre(myList ? genres : undefined, myList ? undefined : genre_ids)} */}
         </div>
       </div>
     </div>
   );
 }
 
-function renderGenre(genre_ids: number[], genres: Genre[]) {
-  const genreMap = genres.reduce(
-    (acc: { [key: number]: string }, genre: Genre) => {
-      acc[genre.id] = genre.name;
-      return acc;
-    },
-    {}
-  );
+// function renderGenre(genres: Genre[] | undefined, genreIds: number[] | undefined) {
+//   // Early return if both genres and genreIds are not provided
+//   if (!genres && !genreIds) return null;
 
-  const validGenres = genre_ids.filter((id) => genreMap[id]);
+//   // Create a genre map only if genres are defined
+//   const genreMap: { [key: number]: string } = genres
+//     ? genres.reduce((acc: { [key: number]: string }, genre: Genre) => {
+//         acc[genre.id] = genre.name;
+//         return acc;
+//       }, {})
+//     : {};
 
-  return (
-    <div className={styles.row}>
-      {validGenres.map((id, index) => {
-        const isLast = index === validGenres.length - 1;
-        const genreName = genreMap[id];
-        return (
-          <div key={id} className={styles.row}>
-            <span className={styles.regularText} style={{color: "white"}}>{genreName}</span>
-            {!isLast && <div className={styles.dot}>&bull;</div>}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
+//   // Filter valid genreIds only if genreMap is available
+//   const validGenres = genreIds && genreMap ? genreIds.filter((id) => genreMap[id]) : [];
+
+//   return (
+//     <div className={styles.row}>
+//       {genres && genres.length > 0
+//         ? genres.map((genre, index) => (
+//             <div key={genre.id} className={styles.row}>
+//               <span className={styles.regularText} style={{ color: "white" }}>
+//                 {genre.name}
+//               </span>
+//               {index < genres.length - 1 && <div className={styles.dot}>&bull;</div>}
+//             </div>
+//           ))
+//         : validGenres.map((id, index) => (
+//             <div key={id} className={styles.row}>
+//               <span className={styles.regularText} style={{ color: "white" }}>
+//                 {genreMap[id]}
+//               </span>
+//               {index < validGenres.length - 1 && <div className={styles.dot}>&bull;</div>}
+//             </div>
+//           ))}
+//     </div>
+//   );
+// }

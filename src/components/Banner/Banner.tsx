@@ -22,30 +22,32 @@ export default function Banner() {
   useEffect(() => {
     const getMedia = async () => {
       try {
-        const result = await axios.get("/discover/movie?with_genres=28&language=en-US&page=1", {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
+        const result = await axios.get(
+          "/discover/movie?with_genres=28&language=en-US&page=1",
+          {
+            params: {
+              api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
+            },
+          }
+        );
 
-        // Select a random movie from the first 5 movies
         const random = Math.floor(Math.random() * 5);
         const selectedMedia = result.data.results[random];
         setMedia(selectedMedia);
 
-        // Fetch the trailer for the selected media (movie)
-        const trailerResponse = await axios.get(`/movie/${selectedMedia.id}/videos`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
+        const trailerResponse = await axios.get(
+          `/movie/${selectedMedia.id}/videos`,
+          {
+            params: {
+              api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
+            },
+          }
+        );
 
-        // Get the first available trailer key
         const videos: Video[] = trailerResponse.data.results;
         const trailer = videos.find((video) => video.type === "Trailer");
         setTrailerKey(trailer ? trailer.key : null);
 
-        // Autoplay after 800ms if a trailer is available
         setTimeout(() => {
           if (trailer) {
             setTrailerKey(trailer.key);
@@ -63,13 +65,13 @@ export default function Banner() {
     <div className={styles.spotlight}>
       {trailerKey ? (
         <div className={styles.spotlight__videoContainer}>
-        <iframe
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&playsinline=1`} // Add playsinline to reduce black bars on mobile
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
+          <iframe
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&playsinline=1`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
       ) : (
         media && (
           <Image
@@ -84,7 +86,8 @@ export default function Banner() {
       <div className={styles.spotlight__details}>
         <div className={styles.title}>{media?.title || media?.title}</div>
         <div className={styles.synopsis}>
-          {media?.overview?.slice(0, 100) + "..." || "No description available."}
+          {media?.overview?.slice(0, 100) + "..." ||
+            "No description available."}
         </div>
         <div className={styles.buttonRow}>
           <Button label="Play" filled Icon={Play} />

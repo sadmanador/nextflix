@@ -7,6 +7,7 @@ import { ROUTES } from '../../config/route';
 import { CaretDown } from '../../utils/icons';
 import styles from '../../styles/Navbar.module.scss';
 import Dialog from '@/Dialog';
+import Image from 'next/image';
 
 
 
@@ -37,7 +38,7 @@ export default function Profile(): React.ReactElement {
 
   return (
     <div className={styles.profile} onMouseOver={onHover}>
-      <img src='../../assets/avatar.png' alt='user' className={styles.user} />
+      <Image width={30} height={30} src='/assets/avatar.png' alt='user' className={styles.user} />
       <motion.div {...caretAnimation}>
         <CaretDown />
       </motion.div>

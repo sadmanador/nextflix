@@ -1,17 +1,15 @@
-"use client"
-import { useRef, useState } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Maybe } from '../../types';
-import { CaretDown } from '../../utils/icons';
-import styles from '../../styles/Navbar.module.scss';
-import useDimensions from '../../hooks/useDimensions';
-import Dialog from '@/Dialog';
-import Link from 'next/link';
+"use client";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Maybe } from "../../types";
+import { CaretDown } from "../../utils/icons";
+import styles from "../../styles/Navbar.module.scss";
+import useDimensions from "../../hooks/useDimensions";
+import Dialog from "@/Dialog";
+import Link from "next/link";
 
-
-
-const browseList = ['Home', 'TV Shows', 'Movies', 'New & Popular', 'My List'];
+const browseList = ["Home", "TV Shows", "Movies", "My List"];
 
 export default function Menu() {
   const { isMobile, isTablet } = useDimensions();
@@ -26,21 +24,27 @@ export default function Menu() {
   };
 
   const caretAnimation = {
-    animate: isVisible ? 'up' : 'down',
+    animate: isVisible ? "up" : "down",
     variants: {
       up: {
-        rotate: 180
+        rotate: 180,
       },
       down: {
-        rotate: 0
-      }
+        rotate: 0,
+      },
     },
-    transition: { duration: 0.25 }
+    transition: { duration: 0.25 },
   };
 
   return (
     <>
-      <Image src='/assets/logo.png' alt='' width={90} height={30} className={styles.nfLogo} />
+      <Image
+        src="/assets/logo.png"
+        alt=""
+        width={90}
+        height={30}
+        className={styles.nfLogo}
+      />
       {isTablet || isMobile ? (
         <>
           <div className={styles.browse}>
@@ -51,7 +55,12 @@ export default function Menu() {
               <CaretDown />
             </motion.div>
           </div>
-          <Dialog dialogRef={menuRef} onClose={onClose} classname={styles.menu} visible={isVisible}>
+          <Dialog
+            dialogRef={menuRef}
+            onClose={onClose}
+            classname={styles.menu}
+            visible={isVisible}
+          >
             {browseList.map((item, index) => (
               <div key={index} className={styles.options}>
                 {item}
@@ -60,15 +69,20 @@ export default function Menu() {
           </Dialog>
         </>
       ) : (
-       
-          <>
-          <Link className={styles.options} href={'/'}>Home</Link>
-          <Link className={styles.options} href={'#'}>TV Shows</Link>
-          <Link className={styles.options} href={'/my_list'}>Movies</Link>
-          <Link className={styles.options} href={'#'}>New & Popular</Link>
-          <Link className={styles.options} href={'#'}>My List</Link>
-          </>
- 
+        <>
+          <Link className={styles.options} href={"/"}>
+            Home
+          </Link>
+          <Link className={styles.options} href={"/tv"}>
+            TV Shows
+          </Link>
+          <Link className={styles.options} href={"/movie"}>
+            Movies
+          </Link>
+          <Link className={styles.options} href={"/my_list"}>
+            My List
+          </Link>
+        </>
       )}
     </>
   );

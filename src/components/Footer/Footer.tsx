@@ -1,7 +1,5 @@
-// components/Footer.tsx
-
 import React from "react";
-import styles from "../../styles/Footer.module.scss"; // Importing SASS styles
+import styles from "../../styles/Footer.module.scss"; 
 import Image from "next/image";
 
 const Footer: React.FC = () => {
@@ -9,7 +7,6 @@ const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.footerLinks}>
-          <h3>Questions? Call 1-844-505-2993</h3>
           <ul>
             <li>
               <a href="#">FAQ</a>

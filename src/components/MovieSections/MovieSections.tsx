@@ -13,7 +13,7 @@ interface MovieSectionProps {
   endpoint: string;
 }
 
-const axios = getInstance(); // Move axios instance outside the component
+const axios = getInstance(); 
 
 export const MovieSections: React.FC<MovieSectionProps> = ({
   defaultCard = true,
@@ -22,13 +22,13 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
   endpoint,
 }) => {
   const [media, setMedia] = useState<Media[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching
+        setLoading(true); 
         const response = await axios.get(`${endpoint}`, {
           params: {
             api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
@@ -40,7 +40,7 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
         setError("Error fetching movies");
         console.error("Error fetching movies:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false); 
       }
     };
 
@@ -55,11 +55,11 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
     <div className={styles.listContainer}>
       <strong className={styles.category}>{heading}</strong>
 
-      {/* Display loading state while data is being fetched */}
+
       {loading ? (
-        <div>Loading...</div> // Add your loading spinner or placeholder here
+        <div>Loading...</div>
       ) : error ? (
-        <div>{error}</div> // Show error message if fetching fails
+        <div>{error}</div>
       ) : (
         <div className={styles.cardRow}>
           {media

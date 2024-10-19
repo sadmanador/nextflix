@@ -17,14 +17,14 @@ function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
     {}
   );
   
-  // Filter out unknown genres
+
   return genre_ids
     .map((id) => genreMap[id])
-    .filter((name) => name); // Filter out undefined or null
+    .filter((name) => name); 
 }
 
 export default function Modal() {
-  const axios = getInstance(); // Ensure you have your axios instance here
+  const axios = getInstance(); 
   const [genres, setGenres] = useState<Genre[]>([]);
   const { modalData, setIsModal, isModal } = useContext(ModalContext);
 
@@ -58,7 +58,7 @@ export default function Modal() {
     };
 
     fetchGenres();
-  }, []); // Added axios as a dependency
+  }); 
 
   return (
     <div
@@ -94,7 +94,7 @@ export default function Modal() {
           <div className={styles.column}>{overview}</div>
           <div className={styles.column}>
             <div className={styles.genre}>
-              Genre: {renderGenre(genre_ids, genres).join(", ")} {/* Display only known genres */}
+              Genre: {renderGenre(genre_ids, genres).join(", ")}
             </div>
           </div>
         </div>

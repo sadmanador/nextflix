@@ -1,4 +1,3 @@
-import Layout from "@/components/Layout/Layout";
 import { ModalProvider } from "@/context/ModalContext";
 import React from "react";
 

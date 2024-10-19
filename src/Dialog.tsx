@@ -7,7 +7,7 @@ interface DialogProps {
   visible: boolean;
   classname?: string;
   onClose: () => void;
-  dialogRef: MutableRefObject<any>;
+  dialogRef: MutableRefObject<HTMLDivElement | null>;
   children: React.ReactNode;
 }
 

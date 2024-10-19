@@ -1,15 +1,13 @@
-@import './variables.scss';
-@import './mixins.scss';
-
-
+@import "./variables.scss";
+@import "./mixins.scss";
 
 .listContainer {
-    display: flex;
-    flex-direction: column;
-    text-transform: capitalize;
-    margin-top: -9rem;
-    padding: 20px; 
-    background-color: $black;
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
+  margin-top: -9rem;
+  padding: 20px;
+  background-color: $black;
 
   @include for-mobile-only {
     margin-top: 0;
@@ -22,8 +20,6 @@
     width: fit-content;
     color: white; // Ensure category text is white
   }
-
-
 
   .cardRow {
     display: flex;
@@ -44,7 +40,7 @@
 
   .cardGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); // Adjust column width
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
   }
 }
@@ -53,8 +49,8 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 14rem;
-  height: 24rem;
+  width: 32rem; // Adjust width for landscape shape
+  height: 18rem; // Adjust height to maintain the landscape aspect ratio
   background-color: $secondary;
   border-radius: 0.28rem;
   margin-right: 0.3rem;
@@ -64,7 +60,7 @@
   color: white; // Ensure all text inside the card is white
 
   &:hover {
-    transform: scale(1.45);
+    transform: scale(1.2); // Adjust hover scale for landscape cards
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.6), 0 6px 6px rgba(0, 0, 0, 0.5);
     z-index: 5;
 
@@ -83,7 +79,7 @@
 
   .cardPoster {
     width: 100%;
-    height: 100%;
+    height: 100%; // Adjust for landscape shape
     object-fit: cover;
     border-radius: 0.28rem;
   }
@@ -99,7 +95,10 @@
     color: white; // Ensure the info text is white
   }
 
-
+  .title {
+    font-size: 1.2rem; // Adjust font size for better readability on larger cards
+    color: white;
+  }
 
   .rating {
     font-size: 0.9rem;
@@ -108,5 +107,20 @@
 
   .genre {
     color: white; // Ensure the genre text is white
+  }
+}
+
+.clearFavoritesButton {
+  background-color: $primary-button;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100px;
+  margin: 20px auto;
+  &:hover {
+    background-color: darken($primary-button, 10%);
   }
 }

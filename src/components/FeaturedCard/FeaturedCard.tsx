@@ -4,7 +4,7 @@ import styles from "../../styles/Cards.module.scss";
 import { Genre, Media, Video } from "../../types";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import getInstance from "@/utils/axio"; // Assuming you have axios instance
+import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
 
@@ -46,12 +46,12 @@ export default function FeatureCard({
   };
 
   const onHover = () => {
-    setIsHovered(true); // Set hover state to true
+    setIsHovered(true); 
     setImage(`https://image.tmdb.org/t/p/original${backdrop_path}`);
   };
 
   const onMouseOut = () => {
-    setIsHovered(false); // Set hover state to false
+    setIsHovered(false); 
     setImage(`https://image.tmdb.org/t/p/original${poster_path}`);
   };
 
@@ -70,7 +70,7 @@ export default function FeatureCard({
     };
 
     fetchGenres();
-  }, []);
+  });
 
   useEffect(() => {
     const fetchTrailer = async () => {
@@ -92,7 +92,7 @@ export default function FeatureCard({
     if (isHovered) {
       fetchTrailer();
     }
-  }, [isHovered, id]);
+  });
 
   return (
     <div className={styles.container}>
@@ -100,8 +100,8 @@ export default function FeatureCard({
 
       <div 
         className={styles.featureCard}
-        onMouseEnter={onHover} // Set hover state on mouse enter
-        onMouseLeave={onMouseOut} // Reset hover state on mouse leave
+        onMouseEnter={onHover} 
+        onMouseLeave={onMouseOut} 
       >
         {isHovered && trailerKey ? (
           <iframe

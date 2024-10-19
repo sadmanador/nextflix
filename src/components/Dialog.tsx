@@ -12,7 +12,7 @@ interface DialogProps {
 }
 
 export default function Dialog({ visible, classname, onClose, dialogRef, children }: DialogProps): React.ReactElement {
-  useExternalClick(dialogRef, onClose); // Call onClose directly since it's a function
+  useExternalClick(dialogRef, onClose); 
 
   return (
     <AnimatePresence>
@@ -23,7 +23,7 @@ export default function Dialog({ visible, classname, onClose, dialogRef, childre
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12 }}
-          transition={{ duration: 0.2 }} // Optional: customize transition duration
+          transition={{ duration: 0.2 }} 
         >
           {children}
         </motion.div>

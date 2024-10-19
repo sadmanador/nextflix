@@ -15,15 +15,16 @@ export type DimensionDetail = {
   isDesktop: boolean;
 };
 
-export type Genre = {
-  id: number;
-  name: string;
-};
 
 export enum MediaType {
   MOVIE = 'movie',
   TV = 'tv'
 }
+
+export type Genre = {
+  id: number;
+  name: string;
+};
 
 export type Media = {
   id: number;
@@ -34,7 +35,8 @@ export type Media = {
   poster_path: string; 
   backdrop_path: string; 
   vote_average: number; 
-  genre_ids: number[]; 
+  genre_ids: number[];
+  genres?: Genre[];
   origin_country: string[]; 
   first_air_date?: string;
 };
@@ -54,4 +56,11 @@ export interface Video {
   name: string;
   site: string;
   type: string;
+}
+
+
+export interface MediaItem {
+  id: number;
+  type: "movie" | "tv";
+  title: string;
 }
