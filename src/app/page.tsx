@@ -38,7 +38,7 @@ export default function Home() {
 const sections: Section[] = [
   {
     heading: "Top 10 Movies in US Today",
-    endpoint: "/trending/movie/day?language=en-US&page=1",
+    endpoint: "/movie/top_rated?language=en-US&page=1",
     topList: true,
     mediaType: "movie",
   },
