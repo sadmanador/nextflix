@@ -8,6 +8,7 @@ import { Media, Genre } from "../../types";
 import Image from "next/image";
 import getInstance from "@/utils/axio";
 import { useRouter } from "next/navigation";
+import SimilarMedia from "../SimilarMedia/SimilarMedia";
 
 const axios = getInstance();
 
@@ -74,6 +75,19 @@ export default function Modal() {
     fetchGenres();
   }, []);
 
+  useEffect(() => {
+    if (isModal) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+  
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModal]);
+  
+
   return (
     <div
       className={styles.container}
@@ -82,8 +96,6 @@ export default function Modal() {
       <div className={styles.overlay} onClick={() => setIsModal(false)}></div>
       <div className={styles.modal}>
         <div className={styles.spotlight} style={{ position: "relative" }}>
-
-
           <Image
             width={600}
             height={480}
@@ -126,6 +138,8 @@ export default function Modal() {
             </div>
           </div>
         </div>
+        <h3 className={styles.similarTitle}>Similar {mediaType == "movie" ?`Movie`: "TV Shows"}</h3>
+      <SimilarMedia mediaType={mediaType} id={id} />
       </div>
     </div>
   );

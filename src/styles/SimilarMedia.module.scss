@@ -1,0 +1,47 @@
+@import './variables.scss';
+@import './mixins.scss';
+
+.mediaContainer {
+  display: flex;
+  flex-direction: row;      // Horizontal layout
+  gap: 1rem;                // Space between cards
+  overflow-x: auto;         // Enable horizontal scrolling
+  padding: 1rem;
+  max-width: 100%;          // Ensure the container takes the full width
+  white-space: nowrap;      // Prevents cards from wrapping to the next line
+
+  scrollbar-width: thin;    // For Firefox, adjust scrollbar width
+
+  &::-webkit-scrollbar {
+    height: 8px;            // For WebKit browsers, adjust scrollbar height for horizontal scrolling
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3); // Adjust scrollbar thumb color
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; // Transparent scrollbar track
+  }
+}
+
+// Card-specific styles for wide layout
+.card {
+  width: 300px;  // Set a wide card width
+  height: auto;  // Adjust height automatically to maintain aspect ratio
+  flex: none;    // Prevent cards from shrinking or growing
+}
+
+// Responsive adjustments for mobile
+@media (max-width: 768px) {
+  .mediaContainer {
+    flex-direction: row;
+    overflow-x: scroll;     // Horizontal scroll enabled on mobile too
+    gap: 0.5rem;
+  }
+
+  .card {
+    width: 250px;          // Slightly smaller wide card on mobile
+  }
+}

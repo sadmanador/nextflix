@@ -88,7 +88,7 @@ const MyListPage: React.FC = () => {
             {movies
               .filter((movie) => movie.poster_path !== null)
               .map((movie) => (
-                <TopMovies key={movie.id} item={movie} myList={true} />
+                <TopMovies key={movie.id} item={movie}  />
               ))}
           </div>
         )}

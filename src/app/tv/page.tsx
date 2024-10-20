@@ -54,7 +54,7 @@ console.log("TV",movies)
             {movies
               .filter((movie) => movie.poster_path !== null)
               .map((movie) => (
-                <TopMovies key={movie.id} item={movie} myList={false}/>
+                <TopMovies key={movie.id} item={movie} />
               ))}
           </div>
         )}

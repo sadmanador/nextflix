@@ -14,7 +14,6 @@ const axios = getInstance();
 
 interface TopMoviesProps {
   item: Media;
-  myList: boolean;
 }
 
 export default function TopMovies({
@@ -60,7 +59,8 @@ export default function TopMovies({
           (video: Video) => video.type === "Trailer"
         );
         setTrailerKey(trailer ? trailer.key : null);
-      } catch (error) {
+      }
+       catch (error) {
         console.log("Error fetching trailer:", error);
       }
     };
@@ -70,9 +70,11 @@ export default function TopMovies({
     }
   });
 
+
+
   return (
     <div
-      className={styles.longCard}
+      className={styles.card} // Switch from longCard to card
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -82,7 +84,7 @@ export default function TopMovies({
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className={styles.cardPoster}
+          className={styles.cardPoster} // Poster style remains the same
         ></iframe>
       ) : (
         <Image
@@ -90,10 +92,10 @@ export default function TopMovies({
           height={350}
           src={image}
           alt="Top movie poster"
-          className={styles.cardPoster}
+          className={styles.cardPoster} // Poster style remains the same
         />
       )}
-      <div className={styles.more}>
+      <div className={styles.cardInfo}>
         <div className={styles.actionRow}>
           <Button Icon={Play} rounded filled onClick={handlePlayClick} />
           <Button
@@ -109,7 +111,6 @@ export default function TopMovies({
               handleAddToLocalStorage(mediaItem);
             }}
           />
-
           <Button Icon={Like} rounded />
           <Button Icon={Dislike} rounded />
           <Button Icon={Down} rounded onClick={() => onClickModal(item)} />
@@ -123,11 +124,10 @@ export default function TopMovies({
               vote_average * 10
             )}% match`}</span>
           </div>
-          {/* {renderGenre(myList ? genres : undefined, myList ? undefined : genre_ids)} */}
         </div>
       </div>
     </div>
-  );
+  );  
 }
 
 // function renderGenre(genres: Genre[] | undefined, genreIds: number[] | undefined) {

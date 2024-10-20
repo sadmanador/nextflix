@@ -104,7 +104,7 @@ export default function Cards({
     if (isHovered) {
       fetchTrailer();
     }
-  }, [isHovered, id]);
+  }, [isHovered, id, mediaType]);
 
   return (
     <div
