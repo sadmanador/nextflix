@@ -8,6 +8,7 @@ import getInstance from "@/utils/axio";
 import Button from "../Button";
 import Image from "next/image";
 import handleAddToLocalStorage from "@/utils/localStorage";
+import { useRouter } from "next/navigation"; 
 
 const axios = getInstance();
 
@@ -25,6 +26,19 @@ export default function Cards({
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false); 
+  const router = useRouter(); 
+
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  const handlePlayClick = () => {
+    if (item?.id && isMounted) {
+      router.push(`/${mediaType}/${item.id}`); 
+    }
+  };
 
   const style = defaultCard ? styles.card : styles.longCard;
   const infoStyle = defaultCard ? styles.cardInfo : styles.more;
@@ -118,7 +132,7 @@ export default function Cards({
       <div className={infoStyle}>
         <div className={styles.actionRow}>
           <div className={styles.actionRow}>
-            <Button Icon={Play} rounded filled />
+            <Button Icon={Play} rounded filled onClick={handlePlayClick}/>
             <Button
               Icon={Add}
               rounded

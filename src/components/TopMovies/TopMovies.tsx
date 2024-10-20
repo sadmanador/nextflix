@@ -8,6 +8,7 @@ import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
 import handleAddToLocalStorage from "@/utils/localStorage";
+import { useRouter } from "next/navigation";
 
 const axios = getInstance();
 
@@ -21,11 +22,24 @@ export default function TopMovies({
 }: TopMoviesProps): React.ReactElement {
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
-
-  const { title, poster_path, vote_average, id, name } = item;
-  const image = `https://image.tmdb.org/t/p/original${poster_path}`;
-
   const { setModalData, setIsModal } = useContext(ModalContext);
+  const { title, poster_path, vote_average, id, name } = item;
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const mediaType = title ? "movie" : "tv";
+
+  const handlePlayClick = () => {
+    if (item?.id && isMounted) {
+      router.push(`/${mediaType}/${item.id}`);
+    }
+  };
+
+  const image = `https://image.tmdb.org/t/p/original${poster_path}`;
 
   const onClickModal = (data: Media) => {
     setModalData(data);
@@ -81,7 +95,7 @@ export default function TopMovies({
       )}
       <div className={styles.more}>
         <div className={styles.actionRow}>
-          <Button Icon={Play} rounded filled />
+          <Button Icon={Play} rounded filled onClick={handlePlayClick} />
           <Button
             Icon={Add}
             rounded

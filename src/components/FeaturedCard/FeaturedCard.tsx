@@ -7,6 +7,7 @@ import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
 import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
+import { useRouter } from "next/navigation";
 
 const axios = getInstance();
 
@@ -39,8 +40,20 @@ export default function FeatureCard({
   const [genres, setGenres] = useState<Genre[]>([]);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
-
   const { setModalData, setIsModal } = useContext(ModalContext);
+  const [isMounted, setIsMounted] = useState(false); 
+  const router = useRouter(); 
+
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  const handlePlayClick = () => {
+    if (item?.id && isMounted) {
+      router.push(`/${mediaType}/${item.id}`); 
+    }
+  };
 
   const onClick = (data: Media) => {
     setModalData(data);
@@ -126,7 +139,7 @@ export default function FeatureCard({
         <div className={styles.info}>
           <div className={styles.actionRow}>
             <div className={styles.actionRow}>
-              <Button Icon={Play} rounded filled />
+              <Button Icon={Play} rounded filled onClick={handlePlayClick}/>
               <Button Icon={Add} rounded />
               <Button Icon={Like} rounded />
               <Button Icon={Dislike} rounded />

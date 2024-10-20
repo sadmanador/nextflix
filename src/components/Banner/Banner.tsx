@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { Media, Video } from "../../types";
 import { Play, Info } from "../../utils/icons";
@@ -14,13 +15,23 @@ export default function Banner() {
   const [media, setMedia] = useState<Media | null>(null);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handlePlayClick = () => {
+    if (media?.id && isMounted) {
+      router.push(`/movie/${media.id}`);
+    }
+  };
 
   const onClick = (data: Media) => {
     setModalData(data);
     setIsModal(true);
   };
-
-  console.log("Banner", media);
 
   useEffect(() => {
     const getMedia = async () => {
@@ -94,7 +105,7 @@ export default function Banner() {
             "No description available."}
         </div>
         <div className={styles.buttonRow}>
-          <Button label="Play" filled Icon={Play} />
+          <Button label="Play" filled Icon={Play} onClick={handlePlayClick} />
           {media && (
             <Button
               label="More Info"
