@@ -6,11 +6,10 @@ import styles from '../../styles/Navbar.module.scss';
 import Menu from './Menu';
 import SearchBar from './SearchBar';
 import Profile from './Profile';
+import { NavbarProps } from '@/types';
 
 
-interface NavbarProps {
-  isScrolled: boolean;
-}
+
 
 export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement {
   const navBackground = isScrolled ? styles.navBar__filled : styles.navBar;

@@ -1,17 +1,6 @@
 "use client";
 import React, { createContext, useState } from "react";
-import { Media } from "../types";
-
-interface Modal {
-  modalData: Media;
-  setModalData: (item: Media) => void;
-  isModal: boolean;
-  setIsModal: (isModal: boolean) => void;
-}
-
-interface ModalProviderProps {
-  children: React.ReactNode;
-}
+import { ChildrenProvider, Media, Modal } from "../types";
 
 export const ModalContext = createContext<Modal>({
   modalData: {} as Media,
@@ -20,7 +9,7 @@ export const ModalContext = createContext<Modal>({
   setIsModal: () => {},
 });
 
-export function ModalProvider({ children }: ModalProviderProps) {
+export function ModalProvider({ children }: ChildrenProvider) {
   const [modalData, setModalData] = useState<Media>({} as Media);
   const [isModal, setIsModal] = useState<boolean>(false);
 

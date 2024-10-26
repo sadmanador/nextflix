@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { Genre, Media, MediaItem, Video } from "../../types";
+import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
 import styles from "../../styles/Cards.module.scss";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
@@ -12,11 +12,7 @@ import { useRouter } from "next/navigation";
 
 const axios = getInstance();
 
-interface CardsProps {
-  defaultCard?: boolean;
-  item: Media;
-  mediaType: string
-}
+
 
 export default function Cards({
   defaultCard = true,

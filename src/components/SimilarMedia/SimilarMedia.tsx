@@ -1,15 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import getInstance from "@/utils/axio";
 import Cards from "../Cards/Cards";
-import { Media } from "@/types";
+import { Media, SimilarMediaProps } from "@/types";
 import styles from "../../styles/SimilarMedia.module.scss";
 
 const axios = getInstance();
-
-interface SimilarMediaProps {
-  id: number;
-  mediaType: string;
-}
 
 export default function SimilarMedia({ id, mediaType }: SimilarMediaProps) {
   const [similarMovies, setSimilarMovies] = useState<Media[]>([]);
@@ -38,7 +33,9 @@ export default function SimilarMedia({ id, mediaType }: SimilarMediaProps) {
   }, [fetchSimilarMovies]);
 
   if (loading) {
-    return <p>Loading similar {mediaType === "movie" ? "movies" : "TV shows"}...</p>;
+    return (
+      <p>Loading similar {mediaType === "movie" ? "movies" : "TV shows"}...</p>
+    );
   }
 
   if (error) {
@@ -50,10 +47,17 @@ export default function SimilarMedia({ id, mediaType }: SimilarMediaProps) {
       <div className={styles.mediaContainer}>
         {similarMovies.length > 0 ? (
           similarMovies.map((item) => (
-            <Cards key={item.id} defaultCard={false} item={item} mediaType={mediaType} />
+            <Cards
+              key={item.id}
+              defaultCard={false}
+              item={item}
+              mediaType={mediaType}
+            />
           ))
         ) : (
-          <p>No similar {mediaType === "movie" ? "movies" : "TV shows"} found.</p>
+          <p>
+            No similar {mediaType === "movie" ? "movies" : "TV shows"} found.
+          </p>
         )}
       </div>
     </div>

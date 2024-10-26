@@ -1,15 +1,7 @@
-import { motion } from 'framer-motion';
-import { MutableRefObject } from 'react';
-import useExternalClick from './hooks/useExternalClick';
+import { motion } from "framer-motion";
 
-
-interface DialogProps {
-  visible: boolean;
-  classname?: string;
-  onClose: () => void;
-  dialogRef: MutableRefObject<HTMLDivElement | null>;
-  children: React.ReactNode;
-}
+import useExternalClick from "./hooks/useExternalClick";
+import { DialogProps } from "./types";
 
 export default function Dialog(props: DialogProps): React.ReactElement {
   const { visible, classname, onClose, dialogRef, children } = props;
@@ -25,7 +17,8 @@ export default function Dialog(props: DialogProps): React.ReactElement {
           className={classname}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}>
+          exit={{ opacity: 0 }}
+        >
           {children}
         </motion.div>
       )}

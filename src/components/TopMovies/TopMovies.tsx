@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import { Media, MediaItem, Video } from "../../types";
+import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
 import styles from "../../styles/Cards.module.scss";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
@@ -12,9 +12,7 @@ import { useRouter } from "next/navigation";
 
 const axios = getInstance();
 
-interface TopMoviesProps {
-  item: Media;
-}
+
 
 export default function TopMovies({
   item,

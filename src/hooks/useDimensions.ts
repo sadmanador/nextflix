@@ -1,15 +1,14 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { isTablet, isDesktop } from 'react-device-detect';
+"use client";
+import { useEffect, useState } from "react";
+import { isDesktop, isTablet } from "react-device-detect";
 
-import { Breakpoint, BreakpointValues } from '../config/breakpoints';
-import { Dimension, DimensionDetail } from '../types';
-
+import { Breakpoint, BreakpointValues } from "../config/breakpoints";
+import { DimensionDetail } from "../types";
 
 export default function useDimensions(): DimensionDetail {
-  const [dimension, setDimension] = useState<Dimension>({
+  const [dimension, setDimension] = useState<DimensionDetail["dimension"]>({
     height: 0,
-    width: 0
+    width: 0,
   });
 
   useEffect(() => {
@@ -18,23 +17,26 @@ export default function useDimensions(): DimensionDetail {
       setDimension({ height, width });
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [dimension]);
 
   const breakpoint: Breakpoint = getBreakpoint(dimension.width);
 
-  const isMobile: boolean = breakpoint === Breakpoint.XS || breakpoint === Breakpoint.SM;
-  const isTablet: boolean = breakpoint === Breakpoint.MD || breakpoint === Breakpoint.LG;
-  const isDesktop: boolean = breakpoint === Breakpoint.XL || breakpoint === Breakpoint.XXL;
+  const isMobile: boolean =
+    breakpoint === Breakpoint.XS || breakpoint === Breakpoint.SM;
+  const isTablet: boolean =
+    breakpoint === Breakpoint.MD || breakpoint === Breakpoint.LG;
+  const isDesktop: boolean =
+    breakpoint === Breakpoint.XL || breakpoint === Breakpoint.XXL;
 
   return {
     dimension,
     breakpoint,
     isMobile,
     isTablet,
-    isDesktop
+    isDesktop,
   };
 }
 

@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import styles from "../../styles/Cards.module.scss";
-import { Genre, Media, Video } from "../../types";
+import { FeatureCardProps, Genre, Media, Video } from "../../types";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
 import getInstance from "@/utils/axio";
@@ -10,12 +10,6 @@ import Button from "../Button";
 import { useRouter } from "next/navigation";
 
 const axios = getInstance();
-
-interface FeatureCardProps {
-  index: number;
-  item: Media;
-  mediaType: string;
-}
 
 export default function FeatureCard({
   index,
@@ -41,17 +35,16 @@ export default function FeatureCard({
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const { setModalData, setIsModal } = useContext(ModalContext);
-  const [isMounted, setIsMounted] = useState(false); 
-  const router = useRouter(); 
-
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  
+
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
-      router.push(`/${mediaType}/${item.id}`); 
+      router.push(`/${mediaType}/${item.id}`);
     }
   };
 
@@ -139,7 +132,7 @@ export default function FeatureCard({
         <div className={styles.info}>
           <div className={styles.actionRow}>
             <div className={styles.actionRow}>
-              <Button Icon={Play} rounded filled onClick={handlePlayClick}/>
+              <Button Icon={Play} rounded filled onClick={handlePlayClick} />
               <Button Icon={Add} rounded />
               <Button Icon={Like} rounded />
               <Button Icon={Dislike} rounded />

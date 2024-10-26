@@ -1,18 +1,16 @@
-"use client"
-import useExternalClick from '@/hooks/useExternalClick';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MutableRefObject } from 'react';
+"use client";
+import useExternalClick from "@/hooks/useExternalClick";
+import { DialogProps } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
 
-interface DialogProps {
-  visible: boolean;
-  classname?: string;
-  onClose: () => void;
-  dialogRef: MutableRefObject<HTMLDivElement | null>;
-  children: React.ReactNode;
-}
-
-export default function Dialog({ visible, classname, onClose, dialogRef, children }: DialogProps): React.ReactElement {
-  useExternalClick(dialogRef, onClose); 
+export default function Dialog({
+  visible,
+  classname,
+  onClose,
+  dialogRef,
+  children,
+}: DialogProps): React.ReactElement {
+  useExternalClick(dialogRef, onClose);
 
   return (
     <AnimatePresence>
@@ -23,7 +21,7 @@ export default function Dialog({ visible, classname, onClose, dialogRef, childre
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12 }}
-          transition={{ duration: 0.2 }} 
+          transition={{ duration: 0.2 }}
         >
           {children}
         </motion.div>

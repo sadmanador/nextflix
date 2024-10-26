@@ -1,5 +1,5 @@
 "use client";
-import { Media } from "@/types";
+import { Media, MovieSectionProps } from "@/types";
 import getInstance from "@/utils/axio";
 import React, { useEffect, useState } from "react";
 import FeaturedCard from "../FeaturedCard/FeaturedCard";
@@ -8,13 +8,7 @@ import styles from "../../styles/Cards.module.scss";
 
 const axios = getInstance(); 
 
-interface MovieSectionProps {
-  defaultCard?: boolean;
-  heading: string;
-  topList?: boolean;
-  endpoint: string;
-  mediaType: string;
-}
+
 
 
 export const MovieSections: React.FC<MovieSectionProps> = ({
