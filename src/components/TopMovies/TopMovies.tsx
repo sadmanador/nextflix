@@ -1,14 +1,14 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
-import styles from "../../styles/Cards.module.scss";
-import { ModalContext } from "../../context/ModalContext";
-import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import Image from "next/image";
-import Button from "../Button";
-import handleAddToLocalStorage from "@/utils/localStorage";
-import { useRouter } from "next/navigation";
 import { getMovie } from "@/utils/apiService";
+import handleAddToLocalStorage from "@/utils/localStorage";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { ModalContext } from "../../context/ModalContext";
+import styles from "../../styles/Cards.module.scss";
+import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
+import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
+import Button from "../Button/Button";
 
 const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);

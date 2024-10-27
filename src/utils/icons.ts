@@ -1,4 +1,4 @@
-import { BiInfoCircle as Info, BiCaretDown as CaretDown } from 'react-icons/bi';
+import { BiInfoCircle as Info, BiCaretDown as CaretDown, BiCheck as Tick } from 'react-icons/bi';
 import {
   IoPlaySharp as Play,
   IoSearch as Search,
@@ -11,4 +11,4 @@ import {
 } from 'react-icons/io5';
 import { AiOutlineLike as Like, AiOutlineDislike as Dislike } from 'react-icons/ai';
 
-export { Info, CaretDown, Play, Search, Notifications, Add, Down, Like, Dislike, Linkedin, Twitter, Github };
+export { Info, CaretDown, Play, Search, Notifications, Add, Down, Like, Dislike, Linkedin, Twitter, Github, Tick };

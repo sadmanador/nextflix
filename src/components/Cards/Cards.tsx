@@ -1,35 +1,41 @@
 "use client";
 import { getMovie } from "@/utils/apiService";
-import handleAddToLocalStorage from "@/utils/localStorage";
+import handleAddToLocalStorage, {
+  handleRemoveFromLocalStorage,
+  isItemInLocalStorage,
+} from "@/utils/localStorage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Cards.module.scss";
 import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
-import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
-import Button from "../Button";
+import { Add, Dislike, Down, Like, Play, Tick } from "../../utils/icons";
+import Button from "../Button/Button";
 
 const Cards = ({
   defaultCard = true,
   item,
-  mediaType,
 }: CardsProps): React.ReactElement => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isInLocalStorage, setIsInLocalStorage] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
+    setIsInLocalStorage(
+      isItemInLocalStorage(item.id, item.title ? "movie" : "tv")
+    );
   }, []);
 
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
-      router.push(`/${mediaType}/${item.id}`);
+      router.push(`/movie/${item.id}`);
     }
   };
 
@@ -57,9 +63,6 @@ const Cards = ({
     setIsModal(true);
   };
 
-  console.log("Cards genres", genres);
-  console.log("Cards trailers", trailerKey);
-
   const fetchGenres = async () => {
     const res = await getMovie("/genre/movie/list");
     if (res.error) {
@@ -71,7 +74,7 @@ const Cards = ({
   };
 
   const fetchTrailer = async () => {
-    const res = await getMovie(`/${mediaType}/${id}/videos`);
+    const res = await getMovie(`/movie/${id}/videos`);
     if (res.error) {
       setError(res.error.message);
       console.log(error);
@@ -93,6 +96,22 @@ const Cards = ({
       fetchTrailer();
     }
   }, [isHovered]);
+
+  const handleAddOrRemove = () => {
+    const mediaType = title ? "movie" : "tv";
+    const mediaItem: MediaItem = {
+      id,
+      type: mediaType,
+      title: title || name,
+    };
+
+    if (isInLocalStorage) {
+      handleRemoveFromLocalStorage(mediaItem);
+    } else {
+      handleAddToLocalStorage(mediaItem);
+    }
+    setIsInLocalStorage(!isInLocalStorage);
+  };
 
   return (
     <div
@@ -122,18 +141,10 @@ const Cards = ({
           <div className={styles.actionRow}>
             <Button Icon={Play} rounded filled onClick={handlePlayClick} />
             <Button
-              Icon={Add}
+              Icon={isInLocalStorage ? Tick : Add}
               rounded
-              onClick={() => {
-                const mediaType = title ? "movie" : "tv";
-                const mediaItem: MediaItem = {
-                  id,
-                  type: mediaType,
-                  title: title || name,
-                };
-                handleAddToLocalStorage(mediaItem);
-              }}
-            />{" "}
+              onClick={handleAddOrRemove}
+            />
             {defaultCard && (
               <>
                 <Button Icon={Like} rounded />

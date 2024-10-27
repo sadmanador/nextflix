@@ -1,7 +1,7 @@
 import { Media, SimilarMediaProps } from "@/types";
 import { getMovie } from "@/utils/apiService";
 import { useEffect, useState } from "react";
-import styles from "../../styles/SimilarMedia.module.scss";
+import { Box, Typography } from "@mui/material"; // Import Box and Typography from MUI
 import Cards from "../Cards/Cards";
 
 const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
@@ -19,23 +19,42 @@ const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchSimilarMovies();
   }, []);
 
   if (loading) {
     return (
-      <p>Loading similar {mediaType === "movie" ? "movies" : "TV shows"}...</p>
+      <Typography>Loading similar {mediaType === "movie" ? "movies" : "TV shows"}...</Typography>
     );
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <Typography>Error: {error}</Typography>;
   }
 
   return (
-    <div className="similar-media">
-      <div className={styles.mediaContainer}>
+    <Box sx={{ padding: 2, overflowX: 'auto', whiteSpace: 'nowrap' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 2, // Space between cards
+          maxWidth: '100%',
+          scrollbarWidth: 'thin', // For Firefox
+          '&::-webkit-scrollbar': {
+            height: '8px', // For WebKit browsers
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)', // Adjust scrollbar thumb color
+            borderRadius: '10px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent', // Transparent scrollbar track
+          },
+        }}
+      >
         {similarMovies.length > 0 ? (
           similarMovies.map((item) => (
             <Cards
@@ -46,12 +65,12 @@ const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
             />
           ))
         ) : (
-          <p>
+          <Typography>
             No similar {mediaType === "movie" ? "movies" : "TV shows"} found.
-          </p>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

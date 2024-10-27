@@ -3,9 +3,8 @@ import Layout from "@/components/Layout/Layout";
 import TopMovies from "@/components/TopMovies/TopMovies";
 import { Media, MediaItem } from "@/types";
 import { getMovie } from "@/utils/apiService";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import styles from "../../styles/TopRatedMoviesPage.module.scss";
 
 const MyListPage: React.FC = () => {
   const [movies, setMovies] = useState<Media[]>([]);
@@ -17,80 +16,61 @@ const MyListPage: React.FC = () => {
     const favoriteItems: MediaItem[] = JSON.parse(
       localStorage.getItem("favoriteItems") || "[]"
     );
-  
+
     if (favoriteItems.length === 0) {
       setError("No movies or TV shows found in your list.");
       setLoading(false);
       return;
     }
-  
+
     const mediaPromises = favoriteItems.map((item: MediaItem) => {
       const endpoint =
         item.type === "movie" ? `/movie/${item.id}` : `/tv/${item.id}`;
       return getMovie(endpoint);
     });
-  
-    const mediaResponses = await Promise.all(mediaPromises);
-    
 
+    const mediaResponses = await Promise.all(mediaPromises);
     const fetchedMedia = mediaResponses
       .filter((response) => response && response.data)
-      .map((response) => response.data as unknown as Media); 
-  
+      .map((response) => response.data as unknown as Media);
+
     setMovies(fetchedMedia);
     setLoading(false);
   };
-  
 
   useEffect(() => {
     loadMovies();
   }, []);
 
-  const clearFavorites = () => {
-    Swal.fire({
-      title: "Are you sure, you want to remove all media?",
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-      denyButtonText: `No I don't`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire("All media are removed", "", "success");
-        localStorage.setItem("favoriteItems", JSON.stringify([]));
-        setMovies([]);
-        setError("No movies found in your list.");
-      } else if (result.isDenied) {
-        Swal.fire("No media were removed", "", "info");
-      }
-    });
-  };
-
   return (
     <Layout>
-      <div className={styles.listContainer}>
-        <h2 className={styles.category}>My Movie List</h2>
+      <Box
+        display="flex"
+        flexDirection="column"
+        p={2}
+        bgcolor="black"
+        sx={{ textTransform: "capitalize" }}
+      >
+        <Typography variant="h4" sx={{ color: "white", mb: 2 }}>
+          My Movie List
+        </Typography>
 
         {loading ? (
-          <div>Loading...</div>
+          <Box display="flex" justifyContent="center">
+            <CircularProgress color="inherit" />
+          </Box>
         ) : error ? (
-          <div>{error}</div>
+          <Typography color="red">{error}</Typography>
         ) : (
-          <div className={styles.cardGrid}>
+          <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
             {movies
               .filter((movie) => movie.poster_path !== null)
               .map((movie) => (
                 <TopMovies key={movie.id} item={movie} />
               ))}
-          </div>
+          </Box>
         )}
-
-        <button
-          onClick={clearFavorites}
-          className={styles.clearFavoritesButton}
-        >
-          Clear My List
-        </button>
-      </div>
+      </Box>
     </Layout>
   );
 };

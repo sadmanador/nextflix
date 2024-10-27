@@ -1,40 +1,57 @@
 import React from "react";
-import styles from "../../styles/Footer.module.scss"; 
 import Image from "next/image";
+import { Box, Typography, Link } from "@mui/material";
 
 const Footer: React.FC = () => {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.footerContent}>
-        <div className={styles.footerLinks}>
-          <ul>
-            <li>
-              <a href="#">FAQ</a>
-            </li>
-            <li>
-              <a href="#">Help Center</a>
-            </li>
-            <li>
-              <a href="#">Terms of Use</a>
-            </li>
-            <li>
-              <a href="#">Privacy</a>
-            </li>
-            <li>
-              <a href="#">Cookie Preferences</a>
-            </li>
-            <li>
-              <a href="#">Corporate Information</a>
-            </li>
+    <footer
+      style={{
+        backgroundColor: "#141414",
+        color: "#ffffff",
+        padding: "40px 20px",
+        textAlign: "center",
+      }}
+    >
+      <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
+        <Box mb={2}>
+          <ul style={{ listStyle: "none", padding: 0 }}>
+            {[
+              "FAQ",
+              "Help Center",
+              "Terms of Use",
+              "Privacy",
+              "Cookie Preferences",
+              "Corporate Information",
+            ].map((link) => (
+              <li key={link} style={{ margin: "5px 0" }}>
+                <Link
+                  href="#"
+                  color="inherit"
+                  underline="none"
+                  sx={{
+                    "&:hover": {
+                      color: "#e50914",
+                      transition: "color 0.3s",
+                    },
+                  }}
+                >
+                  {link}
+                </Link>
+              </li>
+            ))}
           </ul>
-        </div>
-        <div className={styles.footerLogo}>
-        <Image src='/assets/logo.png' alt='' width={90} height={30} className={styles.nfLogo} />
-        </div>
-      </div>
-      <div className={styles.footerBottom}>
-        <p>© 2024 Netflix, Inc.</p>
-      </div>
+        </Box>
+
+        <Box mb={2}>
+          <Image src="/assets/logo.png" alt="Logo" width={90} height={30} />
+        </Box>
+      </Box>
+
+      <Box borderTop="1px solid #333" pt={1}>
+        <Typography variant="body2" color="inherit">
+          © 2024 Netflix, Inc.
+        </Typography>
+      </Box>
     </footer>
   );
 };

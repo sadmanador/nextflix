@@ -1,14 +1,14 @@
 import { getMovie } from "@/utils/apiService";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import { Genre, Media } from "../../types";
 import { Add, Dislike, Like, Play } from "../../utils/icons";
-import Button from "../Button";
+import Button from "../Button/Button";
 import SimilarMedia from "../SimilarMedia/SimilarMedia";
-import { Box, Typography, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
   const genreMap = genres.reduce(

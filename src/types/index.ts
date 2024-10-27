@@ -34,7 +34,7 @@ export type ButtonProps = {
 export type CardsProps = {
   defaultCard?: boolean;
   item: Media;
-  mediaType: string;
+  mediaType?: string;
 };
 
 export enum MediaType {
@@ -77,7 +77,6 @@ export type Section = {
   endpoint: string;
   defaultCard?: boolean;
   topList?: boolean;
-  mediaType: "movie" | "tv";
 };
 
 export type Video = {
@@ -110,7 +109,7 @@ export type MovieSectionProps = {
   heading: string;
   topList?: boolean;
   endpoint: string;
-  mediaType: string;
+  mediaType?: string;
 };
 
 export type NavbarProps = {

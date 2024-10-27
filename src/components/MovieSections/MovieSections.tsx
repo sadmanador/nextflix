@@ -1,23 +1,16 @@
-"use client";
-import { Media, MovieSectionProps } from "@/types";
 import React, { useEffect, useState } from "react";
-import FeaturedCard from "../FeaturedCard/FeaturedCard";
-import Cards from "../Cards/Cards";
-import styles from "../../styles/Cards.module.scss";
+import { Box, Typography } from "@mui/material";
 import { getMovie } from "@/utils/apiService";
+import { Media, MovieSectionProps } from "@/types";
+import Cards from "@/components/Cards/Cards";
 
 export const MovieSections: React.FC<MovieSectionProps> = ({
-  defaultCard = true,
   heading,
-  topList = false,
   endpoint,
-  mediaType,
 }) => {
   const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  console.log("Movie Section", media);
 
   const fetchMovies = async () => {
     const res = await getMovie(`${endpoint}`);
@@ -36,43 +29,54 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
   }, [media.length]);
 
   return (
-    <div className={styles.listContainer}>
-      <strong className={styles.category}>{heading}</strong>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        textTransform: "capitalize",
+        marginTop: { xs: 0, sm: "-9rem" },
+      }}
+    >
+      <Typography
+        component="strong"
+        sx={{
+          fontSize: "1.2rem",
+          marginLeft: "3rem",
+          padding: "0.5rem 0",
+          width: "fit-content",
+          zIndex: 1,
+          marginBottom: ".85rem",
+        }}
+      >
+        {heading}
+      </Typography>
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
         <div>{error}</div>
       ) : (
-        <div className={styles.cardRow}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            padding: { xs: "3.2rem 6rem 2.2rem", sm: "3.2rem 6rem 12.5rem" },
+            overflowX: "auto",
+            marginTop: "-3rem",
+            marginLeft: "-3rem",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {media
             ?.filter(
               (item) => item.poster_path !== null && item.backdrop_path !== null
             )
-            .map((item, index) => {
-              if (topList) {
-                if (index < 10) {
-                  return (
-                    <FeaturedCard
-                      key={index}
-                      index={index + 1}
-                      item={item}
-                      mediaType={mediaType}
-                    />
-                  );
-                }
-              } else {
-                return (
-                  <Cards
-                    key={index}
-                    defaultCard={defaultCard}
-                    item={item}
-                    mediaType={mediaType}
-                  />
-                );
-              }
-            })}
-        </div>
+            .map((item, index) => (
+              <Cards key={index} item={item} />
+            ))}
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
