@@ -42,6 +42,10 @@ const MyListPage: React.FC = () => {
     loadMovies();
   }, []);
 
+  const removeMovie = (id: number) => {
+    setMovies((prevMovies) => prevMovies.filter((movie) => movie.id !== id));
+  };
+
   return (
     <Layout>
       <Box
@@ -51,7 +55,17 @@ const MyListPage: React.FC = () => {
         bgcolor="black"
         sx={{ textTransform: "capitalize" }}
       >
-        <Typography variant="h4" sx={{ color: "white", mb: 2 }}>
+        <Typography
+          component="strong"
+          sx={{
+            fontSize: "1.2rem",
+            marginLeft: "3rem",
+            padding: "0.5rem 0",
+            width: "fit-content",
+            zIndex: 1,
+            marginBottom: ".85rem",
+          }}
+        >
           My Movie List
         </Typography>
 
@@ -66,7 +80,11 @@ const MyListPage: React.FC = () => {
             {movies
               .filter((movie) => movie.poster_path !== null)
               .map((movie) => (
-                <TopMovies key={movie.id} item={movie} />
+                <TopMovies
+                  key={movie.id}
+                  item={movie}
+                  removeMovie={removeMovie}
+                />
               ))}
           </Box>
         )}

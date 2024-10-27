@@ -123,6 +123,7 @@ export type SimilarMediaProps = {
 
 export type TopMoviesProps = {
   item: Media;
+  removeMovie: (id: number) => void;
 };
 
 export type Modal = {

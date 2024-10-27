@@ -1,10 +1,10 @@
 "use client";
+import Cards from "@/components/Cards/Cards";
 import Layout from "@/components/Layout/Layout";
-import TopMovies from "@/components/TopMovies/TopMovies";
 import { Media } from "@/types";
 import { getMovie } from "@/utils/apiService";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
 
 const MoviePage: React.FC = () => {
   const [movies, setMovies] = useState<Media[]>([]);
@@ -12,7 +12,7 @@ const MoviePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const loadMovies = async () => {
-    const res = await getMovie("/discover/movie");
+    const res = await getMovie("/movie/top_rated?language=en-US&page=1");
     if (res.error) {
       setError(res.error.message);
     } else {
@@ -37,7 +37,17 @@ const MoviePage: React.FC = () => {
           marginTop: { xs: 0, sm: 2 },
         }}
       >
-        <Typography variant="h4" sx={{ color: "white", mb: 2 }}>
+        <Typography
+          component="strong"
+          sx={{
+            fontSize: "1.2rem",
+            marginLeft: "3rem",
+            padding: "0.5rem 0",
+            width: "fit-content",
+            zIndex: 1,
+            marginBottom: ".85rem",
+          }}
+        >
           Top Rated Movies
         </Typography>
         {loading ? (
@@ -51,7 +61,7 @@ const MoviePage: React.FC = () => {
             {movies
               .filter((movie) => movie.poster_path !== null)
               .map((movie) => (
-                <TopMovies key={movie.id} item={movie} />
+                <Cards key={movie.id} item={movie} />
               ))}
           </Box>
         )}

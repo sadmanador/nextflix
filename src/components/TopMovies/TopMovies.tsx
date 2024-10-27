@@ -1,16 +1,15 @@
-"use client";
 import { getMovie } from "@/utils/apiService";
-import handleAddToLocalStorage from "@/utils/localStorage";
+import handleAddToLocalStorage, { handleRemoveFromLocalStorage } from "@/utils/localStorage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Cards.module.scss";
 import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
-import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
+import { Add, Dislike, Down, Like, Play, Tick } from "../../utils/icons";
 import Button from "../Button/Button";
 
-const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
+const TopMovies = ({ item, removeMovie }: TopMoviesProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
@@ -19,10 +18,16 @@ const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [isInLocalStorage, setIsInLocalStorage] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+
+    const existingItems: MediaItem[] = JSON.parse(
+      localStorage.getItem("favoriteItems") || "[]"
+    );
+    setIsInLocalStorage(existingItems.some((existingItem) => existingItem.id === id));
+  }, [id]);
 
   const mediaType = title ? "movie" : "tv";
 
@@ -32,14 +37,29 @@ const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
     }
   };
 
+  const handleFavoriteToggle = () => {
+    const mediaItem: MediaItem = {
+      id,
+      type: mediaType,
+      title: title || name,
+    };
+
+    if (isInLocalStorage) {
+      handleRemoveFromLocalStorage(mediaItem);
+      setIsInLocalStorage(false);
+      removeMovie(mediaItem.id);
+    } else {
+      handleAddToLocalStorage(mediaItem);
+      setIsInLocalStorage(true);
+    }
+  };
+
   const image = `https://image.tmdb.org/t/p/original${poster_path}`;
 
   const onClickModal = (data: Media) => {
     setModalData(data);
     setIsModal(true);
   };
-
-  console.log("Top Movies", trailerKey);
 
   const fetchTrailer = async () => {
     const res = await getMovie(`/movie/${id}/videos`);
@@ -59,7 +79,7 @@ const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
     if (isHovered) {
       fetchTrailer();
     }
-  });
+  }, [isHovered]);
 
   return (
     <div
@@ -88,17 +108,9 @@ const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
         <div className={styles.actionRow}>
           <Button Icon={Play} rounded filled onClick={handlePlayClick} />
           <Button
-            Icon={Add}
+            Icon={isInLocalStorage ? Tick : Add}
             rounded
-            onClick={() => {
-              const mediaType = title ? "movie" : "tv";
-              const mediaItem: MediaItem = {
-                id,
-                type: mediaType,
-                title: title || name,
-              };
-              handleAddToLocalStorage(mediaItem);
-            }}
+            onClick={handleFavoriteToggle}
           />
           <Button Icon={Like} rounded />
           <Button Icon={Dislike} rounded />
@@ -118,4 +130,5 @@ const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
     </div>
   );
 };
+
 export default TopMovies;
