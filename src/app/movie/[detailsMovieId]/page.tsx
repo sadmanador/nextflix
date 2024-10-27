@@ -2,44 +2,38 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import axios from "axios";
-import { Video } from "@/types";
 import Layout from "@/components/Layout/Layout";
+import { Video } from "@/types";
 
 export default function DetailsMoviePage() {
   const pathname = usePathname();
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const movieId = pathname.split("/").pop();
 
-  console.log(movieId);
-  console.log(trailerKey);
+  const loadTrailer = async () => {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}/videos`,
+      {
+        params: {
+          api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
+        },
+      }
+    );
+    const trailer = response.data.results.find(
+      (video: Video) => video.type === "Trailer"
+    );
+    setTrailerKey(trailer ? trailer.key : null);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchTrailer = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/videos`,
-          {
-            params: {
-              api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-            },
-          }
-        );
-        const trailer = response.data.results.find(
-          (video: Video) => video.type === "Trailer"
-        );
-        setTrailerKey(trailer ? trailer.key : null);
-      } catch (error) {
-        console.error("Error fetching trailer:", error);
-      }
-    };
-
     if (movieId) {
-      fetchTrailer();
+      loadTrailer();
     }
   }, [movieId]);
 
-  // Render video if trailerKey exists
   return (
     <Layout>
       <div
@@ -51,7 +45,9 @@ export default function DetailsMoviePage() {
           alignItems: "center",
         }}
       >
-        {trailerKey ? (
+        {loading ? (
+          <p style={{ color: "white" }}>Loading trailer...</p>
+        ) : trailerKey ? (
           <iframe
             src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&modestbranding=1&showinfo=0`}
             frameBorder="0"
@@ -63,7 +59,7 @@ export default function DetailsMoviePage() {
             }}
           ></iframe>
         ) : (
-          <p style={{ color: "white" }}>Loading trailer...</p>
+          <p style={{ color: "white" }}>Trailer not available</p>
         )}
       </div>
     </Layout>

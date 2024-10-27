@@ -39,7 +39,7 @@ export default function DetailsTvShowPage() {
     }
   }, [movieId]);
 
-  // Render video if trailerKey exists
+
   return (
     <Layout>
       <div

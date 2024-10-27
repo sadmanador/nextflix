@@ -87,6 +87,7 @@ export type Video = {
   type: string;
 };
 
+
 export type MediaItem = {
   id: number;
   type: "movie" | "tv";

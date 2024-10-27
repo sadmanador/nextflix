@@ -31,7 +31,6 @@ const MoviePage: React.FC = () => {
     <Layout>
       <div className={styles.listContainer}>
         <h2 className={styles.category}>Top Rated Movies</h2>
-
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
