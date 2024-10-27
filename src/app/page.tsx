@@ -6,9 +6,9 @@ import { MovieSections } from "@/components/MovieSections/MovieSections";
 import { ModalContext } from "@/context/ModalContext";
 import { Section } from "@/types";
 import { useContext } from "react";
-import styles from "../styles/Browse.module.scss";
+import { Box } from "@mui/material";
 
-export default function Home() {
+const Home = () => {
   const { isModal } = useContext(ModalContext);
 
   return (
@@ -16,9 +16,17 @@ export default function Home() {
       {isModal && <Modal />}
       <Layout>
         <Banner />
-        <div className={styles.contentContainer}>
-          {sections.map((item, index) => {
-            return (
+        <Box
+          sx={{
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "#141414",
+            color: "white",
+          }}
+        >
+          <Box sx={{ marginLeft: "0.8rem" }}>
+            {sections.map((item, index) => (
               <MovieSections
                 key={index}
                 heading={item.heading}
@@ -27,19 +35,19 @@ export default function Home() {
                 topList={item?.topList}
                 mediaType={item?.mediaType}
               />
-            );
-          })}
-        </div>
+            ))}
+          </Box>
+        </Box>
       </Layout>
     </>
   );
-}
+};
 
 const sections: Section[] = [
   {
     heading: "Top 10 Movies in US Today",
     endpoint: "/movie/top_rated?language=en-US&page=1",
-   
+
     mediaType: "movie",
   },
   {
@@ -98,3 +106,5 @@ const sections: Section[] = [
     mediaType: "movie",
   },
 ];
+
+export default Home;

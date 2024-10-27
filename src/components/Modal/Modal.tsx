@@ -113,7 +113,7 @@ export default function Modal() {
       />
       <Box
         sx={{
-          backgroundColor: "primary.main",
+          backgroundColor: "#252525",
           color: "white",
           zIndex: 2,
           minWidth: "55%",
