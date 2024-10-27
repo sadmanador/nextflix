@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Media, MediaItem, MoviesResponse } from "@/types";
-import styles from "../../styles/TopRatedMoviesPage.module.scss";
-import TopMovies from "@/components/TopMovies/TopMovies";
 import Layout from "@/components/Layout/Layout";
-import Swal from "sweetalert2";
+import TopMovies from "@/components/TopMovies/TopMovies";
+import { Media, MediaItem } from "@/types";
 import { getMovie } from "@/utils/apiService";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import styles from "../../styles/TopRatedMoviesPage.module.scss";
 
 const MyListPage: React.FC = () => {
   const [movies, setMovies] = useState<Media[]>([]);
@@ -17,27 +17,30 @@ const MyListPage: React.FC = () => {
     const favoriteItems: MediaItem[] = JSON.parse(
       localStorage.getItem("favoriteItems") || "[]"
     );
-
+  
     if (favoriteItems.length === 0) {
       setError("No movies or TV shows found in your list.");
       setLoading(false);
       return;
     }
-
+  
     const mediaPromises = favoriteItems.map((item: MediaItem) => {
       const endpoint =
         item.type === "movie" ? `/movie/${item.id}` : `/tv/${item.id}`;
       return getMovie(endpoint);
     });
-
+  
     const mediaResponses = await Promise.all(mediaPromises);
-    const fetchedMedia = mediaResponses.map(
-      (response) => response.data
-    );
+    
 
+    const fetchedMedia = mediaResponses
+      .filter((response) => response && response.data)
+      .map((response) => response.data as unknown as Media); 
+  
     setMovies(fetchedMedia);
     setLoading(false);
   };
+  
 
   useEffect(() => {
     loadMovies();
