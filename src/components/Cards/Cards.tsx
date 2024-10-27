@@ -10,7 +10,16 @@ import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Cards.module.scss";
 import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
-import { Add, Dislike, Down, Like, Play, Tick } from "../../utils/icons";
+import {
+  Add,
+  Dislike,
+  Down,
+  Like,
+  Play,
+  Tick,
+  Mute,
+  Unmute,
+} from "../../utils/icons";
 import Button from "../Button/Button";
 
 const Cards = ({
@@ -24,6 +33,7 @@ const Cards = ({
   const [isInLocalStorage, setIsInLocalStorage] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(true); // New state for mute/unmute
   const router = useRouter();
 
   useEffect(() => {
@@ -113,6 +123,10 @@ const Cards = ({
     setIsInLocalStorage(!isInLocalStorage);
   };
 
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev); // Toggle mute state
+  };
+
   return (
     <div
       className={style}
@@ -120,13 +134,24 @@ const Cards = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {isHovered && trailerKey ? (
-        <iframe
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0`}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className={styles.cardPoster}
-        ></iframe>
+        <div className={styles.videoContainer}>
+          <iframe
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=${
+              isMuted ? 1 : 0
+            }&controls=0&modestbranding=1&showinfo=0`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className={styles.cardPoster}
+          ></iframe>
+          <div className={styles.muteButton}>
+            <Button
+              Icon={isMuted ? Mute : Unmute}
+              rounded
+              onClick={toggleMute}
+            />
+          </div>
+        </div>
       ) : (
         <Image
           width={450}
@@ -194,4 +219,5 @@ function renderGenre(genre_ids: number[], genres: Genre[]) {
     </div>
   );
 }
+
 export default Cards;

@@ -1,11 +1,15 @@
-@import './variables.scss';
-@import './mixins.scss';
+@import "./variables.scss";
+@import "./mixins.scss";
 
 .listContainer {
   display: flex;
   flex-direction: column;
   text-transform: capitalize;
   margin-top: -9rem;
+  position: relative;
+  width: 100%; // Adjust as needed
+  height: 100%; // Adjust as needed
+
 
   @include for-mobile-only {
     margin-top: 0;
@@ -17,10 +21,8 @@
     padding: 0.5rem 0;
     width: fit-content;
     z-index: 1;
-    margin-bottom: .85rem;
+    margin-bottom: 0.85rem;
   }
-
-
 
   .cardRow {
     display: flex;
@@ -38,8 +40,6 @@
       padding: 3.2rem 6rem 2.2rem;
     }
   }
-
-  
 }
 
 .card {
@@ -90,7 +90,6 @@
     font-size: inherit;
   }
 }
-
 
 .modalButton {
   display: flex;
@@ -260,4 +259,11 @@
   display: none;
   padding: 0.4rem;
   font-size: inherit;
+}
+
+.muteButton {
+  position: absolute;
+  right: 2%;
+  top: 45%;
+  z-index: 10;
 }

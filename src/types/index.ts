@@ -60,15 +60,17 @@ export type Media = {
   genres?: Genre[];
   origin_country: string[];
   first_air_date?: string;
+  key?: string;
+  type?: string;
 };
 
 export type MoviesResponse = {
   page: number;
   total_results: number;
   total_pages: number;
-  genres?: []
+  genres?: [];
   results: Media[];
-}
+};
 
 export type ImageType = "poster" | "original";
 
@@ -82,11 +84,10 @@ export type Section = {
 export type Video = {
   id: string;
   key: string;
+  type: string;
   name: string;
   site: string;
-  type: string;
 };
-
 
 export type MediaItem = {
   id: number;
@@ -131,4 +132,9 @@ export type Modal = {
   setModalData: (item: Media) => void;
   isModal: boolean;
   setIsModal: (isModal: boolean) => void;
+};
+
+export type AudioControl = {
+  mute: () => void;
+  unMute: () => void; 
 };
