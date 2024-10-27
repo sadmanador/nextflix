@@ -1,54 +1,39 @@
 "use client";
 import { Media, MovieSectionProps } from "@/types";
-import getInstance from "@/utils/axio";
 import React, { useEffect, useState } from "react";
 import FeaturedCard from "../FeaturedCard/FeaturedCard";
 import Cards from "../Cards/Cards";
 import styles from "../../styles/Cards.module.scss";
-
-const axios = getInstance(); 
-
-
-
+import { getMovie } from "@/utils/apiService";
 
 export const MovieSections: React.FC<MovieSectionProps> = ({
   defaultCard = true,
   heading,
   topList = false,
   endpoint,
-  mediaType
+  mediaType,
 }) => {
   const [media, setMedia] = useState<Media[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("Movie Section",media)
+  console.log("Movie Section", media);
+
+  const fetchMovies = async () => {
+    const res = await getMovie(`${endpoint}`);
+    if (res.error) {
+      setError(res.error.message);
+    } else {
+      setMedia(res.data?.results || []);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        setLoading(true); 
-        const response = await axios.get(`${endpoint}`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-
-        setMedia(response.data.results);
-      } catch (error) {
-        setError("Error fetching movies");
-        console.error("Error fetching movies:", error);
-      } finally {
-        setLoading(false); 
-      }
-    };
-
     if (media.length === 0) {
       fetchMovies();
     }
-  }, [endpoint, media.length]);
-
-
+  }, [media.length]);
 
   return (
     <div className={styles.listContainer}>
@@ -67,12 +52,22 @@ export const MovieSections: React.FC<MovieSectionProps> = ({
               if (topList) {
                 if (index < 10) {
                   return (
-                    <FeaturedCard key={index} index={index + 1} item={item} mediaType={mediaType}/>
+                    <FeaturedCard
+                      key={index}
+                      index={index + 1}
+                      item={item}
+                      mediaType={mediaType}
+                    />
                   );
                 }
               } else {
                 return (
-                  <Cards key={index} defaultCard={defaultCard} item={item} mediaType={mediaType}/>
+                  <Cards
+                    key={index}
+                    defaultCard={defaultCard}
+                    item={item}
+                    mediaType={mediaType}
+                  />
                 );
               }
             })}

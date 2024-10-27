@@ -66,6 +66,7 @@ export type MoviesResponse = {
   page: number;
   total_results: number;
   total_pages: number;
+  genres?: []
   results: Media[];
 }
 

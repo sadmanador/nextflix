@@ -1,15 +1,14 @@
 "use client";
+import { getMovie } from "@/utils/apiService";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Cards.module.scss";
 import { FeatureCardProps, Genre, Media, Video } from "../../types";
-import { ModalContext } from "../../context/ModalContext";
-import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import getInstance from "@/utils/axio";
-import Image from "next/image";
+import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
 import Button from "../Button";
-import { useRouter } from "next/navigation";
 
-const axios = getInstance();
 
 export default function FeatureCard({
   index,
@@ -36,6 +35,8 @@ export default function FeatureCard({
   const [isHovered, setIsHovered] = useState(false);
   const { setModalData, setIsModal } = useContext(ModalContext);
   const [isMounted, setIsMounted] = useState(false);
+  const [, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -65,36 +66,31 @@ export default function FeatureCard({
 
   console.log("Featured Cards", genres, trailerKey);
 
+  const fetchGenres = async () => {
+    const res = await getMovie(`/genre/${mediaType}/list`);
+    if (res.error) {
+      setError(res.error.message);
+      console.log(error)
+    } else {
+      setGenres(res.data?.genres || []);
+    }
+    setLoading(false);
+  };
+
+  const fetchTrailer = async () => {
+    const res = await getMovie(`/${mediaType}/${id}/videos`);
+    if (res.error) {
+      setError(res.error.message);
+    } else {
+      const trailer = (res.data?.results as unknown as Video[]).find(
+        (video) => video.type === "Trailer"
+      );
+      setTrailerKey(trailer ? trailer.key : null);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await axios.get(`/genre/${mediaType}/list`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        setGenres(response.data.genres);
-      } catch (error) {
-        console.log("Error fetching genres:", error);
-      }
-    };
-
-    const fetchTrailer = async () => {
-      try {
-        const response = await axios.get(`/${mediaType}/${id}/videos`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        const trailer = response.data.results.find(
-          (video: Video) => video.type === "Trailer"
-        );
-        setTrailerKey(trailer ? trailer.key : null);
-      } catch (error) {
-        console.log("Error fetching trailer:", error);
-      }
-    };
-
     if (isHovered) {
       fetchTrailer();
     }

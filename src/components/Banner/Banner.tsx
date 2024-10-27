@@ -6,24 +6,17 @@ import { Media, Video } from "../../types";
 import { Play, Info } from "../../utils/icons";
 import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Banner.module.scss";
-import getInstance from "@/utils/axio";
+import { getMovie } from "@/utils/apiService";
 import Image from "next/image";
 
-const axios = getInstance();
-
-export default function Banner() {
+const Banner = () => {
   const [media, setMedia] = useState<Media | null>(null);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
-  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   const handlePlayClick = () => {
-    if (media?.id && isMounted) {
+    if (media?.id) {
       router.push(`/movie/${media.id}`);
     }
   };
@@ -33,46 +26,44 @@ export default function Banner() {
     setIsModal(true);
   };
 
-  useEffect(() => {
-    const getMedia = async () => {
-      try {
-        const result = await axios.get(
-          "/discover/movie?with_genres=28&language=en-US&page=1",
-          {
-            params: {
-              api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-            },
-          }
-        );
+  const loadMedia = async () => {
+    try {
+      const result = await getMovie(
+        "/discover/movie?with_genres=28&language=en-US&page=1"
+      );
 
-        const random = Math.floor(Math.random() * 5);
-        const selectedMedia = result.data.results[random];
+      if (result && result.data && result.data.results) {
+        const randomIndex = Math.floor(
+          Math.random() * result.data.results.length
+        );
+        const selectedMedia = result.data.results[randomIndex];
         setMedia(selectedMedia);
 
-        const trailerResponse = await axios.get(
-          `/movie/${selectedMedia.id}/videos`,
-          {
-            params: {
-              api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-            },
-          }
+        const trailerResponse = await getMovie(
+          `/movie/${selectedMedia.id}/videos`
         );
 
-        const videos: Video[] = trailerResponse.data.results;
-        const trailer = videos.find((video) => video.type === "Trailer");
-        setTrailerKey(trailer ? trailer.key : null);
+        if (
+          trailerResponse &&
+          trailerResponse.data &&
+          Array.isArray(trailerResponse.data.results)
+        ) {
+          const videos: Video[] = trailerResponse.data
+            .results as unknown as Video[];
 
-        setTimeout(() => {
-          if (trailer) {
-            setTrailerKey(trailer.key);
-          }
-        }, 800);
-      } catch (error) {
-        console.log(error);
+          const trailer = videos.find((video) => video.type === "Trailer");
+          setTrailerKey(trailer ? trailer.key : null);
+        }
+      } else {
+        console.error("No data found in the response");
       }
-    };
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    getMedia();
+  useEffect(() => {
+    loadMedia();
   }, []);
 
   return (
@@ -117,4 +108,6 @@ export default function Banner() {
       </div>
     </div>
   );
-}
+};
+
+export default Banner;

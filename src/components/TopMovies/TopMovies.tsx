@@ -4,13 +4,11 @@ import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
 import styles from "../../styles/Cards.module.scss";
 import { ModalContext } from "../../context/ModalContext";
 import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import getInstance from "@/utils/axio";
 import Image from "next/image";
 import Button from "../Button";
 import handleAddToLocalStorage from "@/utils/localStorage";
 import { useRouter } from "next/navigation";
-
-const axios = getInstance();
+import { getMovie } from "@/utils/apiService";
 
 
 
@@ -22,6 +20,8 @@ export default function TopMovies({
   const { setModalData, setIsModal } = useContext(ModalContext);
   const { title, poster_path, vote_average, id, name } = item;
   const [isMounted, setIsMounted] = useState(false);
+  const [, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,30 +45,25 @@ export default function TopMovies({
 
   console.log("Top Movies", trailerKey);
 
-  useEffect(() => {
-    const fetchTrailer = async () => {
-      try {
-        const response = await axios.get(`/movie/${id}/videos`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        const trailer = response.data.results.find(
-          (video: Video) => video.type === "Trailer"
-        );
-        setTrailerKey(trailer ? trailer.key : null);
-      }
-       catch (error) {
-        console.log("Error fetching trailer:", error);
-      }
-    };
+  const fetchTrailer = async () => {
+    const res = await getMovie(`/movie/${id}/videos`);
+    if (res.error) {
+      setError(res.error.message);
+      console.log(error)
+    } else {
+      const trailer = (res.data?.results as unknown as Video[]).find(
+        (video) => video.type === "Trailer"
+      );
+      setTrailerKey(trailer ? trailer.key : null);
+    }
+    setLoading(false);
+  };
 
+  useEffect(() => {
     if (isHovered) {
       fetchTrailer();
     }
   });
-
-
 
   return (
     <div
@@ -125,7 +120,7 @@ export default function TopMovies({
         </div>
       </div>
     </div>
-  );  
+  );
 }
 
 // function renderGenre(genres: Genre[] | undefined, genreIds: number[] | undefined) {

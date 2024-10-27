@@ -1,16 +1,16 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import styles from "../../styles/Modal.module.scss";
-import { ModalContext } from "../../context/ModalContext";
-import { Play, Add, Like, Dislike } from "../../utils/icons";
-import Button from "../Button";
-import { Media, Genre } from "../../types";
+import { getMovie } from "@/utils/apiService";
 import Image from "next/image";
-import getInstance from "@/utils/axio";
 import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { ModalContext } from "../../context/ModalContext";
+import styles from "../../styles/Modal.module.scss";
+import { Genre, Media } from "../../types";
+import { Add, Dislike, Like, Play } from "../../utils/icons";
+import Button from "../Button";
 import SimilarMedia from "../SimilarMedia/SimilarMedia";
 
-const axios = getInstance();
+
 
 function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
   const genreMap = genres.reduce(
@@ -26,6 +26,8 @@ function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
 
 export default function Modal() {
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { modalData, setIsModal, isModal } = useContext(ModalContext);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
@@ -58,20 +60,19 @@ export default function Modal() {
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
     : `https://image.tmdb.org/t/p/original${poster_path}`;
 
-  useEffect(() => {
+
     const fetchGenres = async () => {
-      try {
-        const response = await axios.get("/genre/movie/list", {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        setGenres(response.data.genres);
-      } catch (error) {
-        console.log("Error fetching genres:", error);
-      }
+        const res = await getMovie("/genre/movie/list");
+        if (res.error) {
+          setError(res.error.message);
+          console.log(error)
+        } else {
+          setGenres(res.data?.genres || []);
+        }
+        setLoading(false);
     };
 
+  useEffect(() => {
     fetchGenres();
   }, []);
 

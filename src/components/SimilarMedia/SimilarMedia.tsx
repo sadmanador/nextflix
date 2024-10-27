@@ -1,36 +1,27 @@
-import React, { useEffect, useState, useCallback } from "react";
-import getInstance from "@/utils/axio";
-import Cards from "../Cards/Cards";
 import { Media, SimilarMediaProps } from "@/types";
+import { getMovie } from "@/utils/apiService";
+import { useEffect, useState } from "react";
 import styles from "../../styles/SimilarMedia.module.scss";
+import Cards from "../Cards/Cards";
 
-const axios = getInstance();
-
-export default function SimilarMedia({ id, mediaType }: SimilarMediaProps) {
+const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
   const [similarMovies, setSimilarMovies] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSimilarMovies = useCallback(async () => {
-    try {
-      const response = await axios.get(`/${mediaType}/${id}/similar`, {
-        params: {
-          api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-        },
-      });
-      setSimilarMovies(response.data.results);
-      setLoading(false);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Something went wrong!";
-      setError(errorMessage);
+  const fetchSimilarMovies = async () => {
+    const res = await getMovie(`/${mediaType}/${id}/similar`);
+    if (res.error) {
+      setError(res.error.message);
+    } else {
+      setSimilarMovies(res.data?.results || []);
       setLoading(false);
     }
-  }, [id, mediaType]);
-
+    setLoading(false);
+  };
   useEffect(() => {
     fetchSimilarMovies();
-  }, [fetchSimilarMovies]);
+  }, []);
 
   if (loading) {
     return (
@@ -62,4 +53,6 @@ export default function SimilarMedia({ id, mediaType }: SimilarMediaProps) {
       </div>
     </div>
   );
-}
+};
+
+export default SimilarMedia;

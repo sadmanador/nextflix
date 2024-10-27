@@ -1,38 +1,35 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
-import styles from "../../styles/Cards.module.scss";
-import { ModalContext } from "../../context/ModalContext";
-import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import getInstance from "@/utils/axio";
-import Button from "../Button";
-import Image from "next/image";
+import { getMovie } from "@/utils/apiService";
 import handleAddToLocalStorage from "@/utils/localStorage";
-import { useRouter } from "next/navigation"; 
-
-const axios = getInstance();
-
-
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { ModalContext } from "../../context/ModalContext";
+import styles from "../../styles/Cards.module.scss";
+import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
+import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
+import Button from "../Button";
 
 export default function Cards({
   defaultCard = true,
   item,
-  mediaType
+  mediaType,
 }: CardsProps): React.ReactElement {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
-  const [isMounted, setIsMounted] = useState(false); 
-  const router = useRouter(); 
-
+  const [isMounted, setIsMounted] = useState(false);
+  const [, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  
+
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
-      router.push(`/${mediaType}/${item.id}`); 
+      router.push(`/${mediaType}/${item.id}`);
     }
   };
 
@@ -63,44 +60,41 @@ export default function Cards({
   console.log("Cards genres", genres);
   console.log("Cards trailers", trailerKey);
 
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await axios.get("/genre/movie/list", {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        setGenres(response.data.genres);
-      } catch (error) {
-        console.log("Error fetching genres:", error);
-      }
-    };
+  const fetchGenres = async () => {
 
+    const res = await getMovie("/genre/movie/list");
+    if (res.error) {
+      setError(res.error.message);
+    } else {
+      setGenres(res.data?.genres || []);
+    }
+    setLoading(false);
+    
+  };
+
+  const fetchTrailer = async () => {
+    const res = await getMovie(`/${mediaType}/${id}/videos`);
+    if (res.error) {
+      setError(res.error.message);
+      console.log(error)
+    } else {
+      const trailer = (res.data?.results as unknown as Video[]).find(
+        (video) => video.type === "Trailer"
+      );
+      setTrailerKey(trailer ? trailer.key : null);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchGenres();
   }, []);
 
   useEffect(() => {
-    const fetchTrailer = async () => {
-      try {
-        const response = await axios.get(`/${mediaType}/${id}/videos`, {
-          params: {
-            api_key: process.env.NEXT_PUBLIC_TMDB_KEY,
-          },
-        });
-        const trailer = response.data.results.find(
-          (video: Video) => video.type === "Trailer"
-        );
-        setTrailerKey(trailer ? trailer.key : null);
-      } catch (error) {
-        console.log("Error fetching trailer:", error);
-      }
-    };
-
     if (isHovered) {
       fetchTrailer();
     }
-  }, [isHovered, id, mediaType]);
+  }, [isHovered]);
 
   return (
     <div
@@ -128,7 +122,7 @@ export default function Cards({
       <div className={infoStyle}>
         <div className={styles.actionRow}>
           <div className={styles.actionRow}>
-            <Button Icon={Play} rounded filled onClick={handlePlayClick}/>
+            <Button Icon={Play} rounded filled onClick={handlePlayClick} />
             <Button
               Icon={Add}
               rounded
