@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const browseList = ["Home", "TV Shows", "Movies", "My List"];
 
-export default function Menu() {
+const Menu = () => {
   const { isMobile, isTablet } = useDimensions();
   const menuRef = useRef<Maybe<HTMLDivElement>>(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -86,4 +86,5 @@ export default function Menu() {
       )}
     </>
   );
-}
+};
+export default Menu;

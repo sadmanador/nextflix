@@ -10,11 +10,11 @@ import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
 import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
 import Button from "../Button";
 
-export default function Cards({
+const Cards = ({
   defaultCard = true,
   item,
   mediaType,
-}: CardsProps): React.ReactElement {
+}: CardsProps): React.ReactElement => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
@@ -61,7 +61,6 @@ export default function Cards({
   console.log("Cards trailers", trailerKey);
 
   const fetchGenres = async () => {
-
     const res = await getMovie("/genre/movie/list");
     if (res.error) {
       setError(res.error.message);
@@ -69,14 +68,13 @@ export default function Cards({
       setGenres(res.data?.genres || []);
     }
     setLoading(false);
-    
   };
 
   const fetchTrailer = async () => {
     const res = await getMovie(`/${mediaType}/${id}/videos`);
     if (res.error) {
       setError(res.error.message);
-      console.log(error)
+      console.log(error);
     } else {
       const trailer = (res.data?.results as unknown as Video[]).find(
         (video) => video.type === "Trailer"
@@ -157,7 +155,7 @@ export default function Cards({
       </div>
     </div>
   );
-}
+};
 
 function renderGenre(genre_ids: number[], genres: Genre[]) {
   const genreMap = genres.reduce(
@@ -185,3 +183,4 @@ function renderGenre(genre_ids: number[], genres: Genre[]) {
     </div>
   );
 }
+export default Cards;

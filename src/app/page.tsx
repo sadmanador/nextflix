@@ -47,23 +47,12 @@ const sections: Section[] = [
   {
     heading: "Top 10 Movies in US Today",
     endpoint: "/movie/top_rated?language=en-US&page=1",
-
     mediaType: "movie",
-  },
-  {
-    heading: "Popular on Netflix",
-    endpoint: "/tv/popular?language=en-US&page=1",
-    mediaType: "tv",
   },
   {
     heading: "Horror Movies",
     endpoint: "/discover/movie?with_genres=27&language=en-US&page=1",
     mediaType: "movie",
-  },
-  {
-    heading: "Only on Netflix",
-    endpoint: "/discover/tv?language=en-US&page=1",
-    mediaType: "tv",
   },
   {
     heading: "Trending Now",
@@ -76,19 +65,9 @@ const sections: Section[] = [
     mediaType: "movie",
   },
   {
-    heading: "Top 10 TV Shows in US Today",
-    endpoint: "/tv/top_rated?language=en-US&page=1",
-    mediaType: "tv",
-  },
-  {
     heading: "Action",
     endpoint: "/discover/movie?with_genres=28&language=en-US&page=1",
     mediaType: "movie",
-  },
-  {
-    heading: "TV Sci-Fi and Horror",
-    endpoint: "/discover/tv?with_genres=10765&language=en-US&page=1",
-    mediaType: "tv",
   },
   {
     heading: "Mystery Movies",
@@ -96,13 +75,23 @@ const sections: Section[] = [
     mediaType: "movie",
   },
   {
-    heading: "Animation",
-    endpoint: "/discover/tv?with_genres=16&language=en-US&page=1",
-    mediaType: "tv",
-  },
-  {
     heading: "Drama",
     endpoint: "/discover/movie?with_genres=18&language=en-US&page=1",
+    mediaType: "movie",
+  },
+  {
+    heading: "Adventure",
+    endpoint: "/discover/movie?with_genres=12&language=en-US&page=1",
+    mediaType: "movie",
+  },
+  {
+    heading: "Romance",
+    endpoint: "/discover/movie?with_genres=10749&language=en-US&page=1",
+    mediaType: "movie",
+  },
+  {
+    heading: "Documentaries",
+    endpoint: "/discover/movie?with_genres=99&language=en-US&page=1",
     mediaType: "movie",
   },
 ];

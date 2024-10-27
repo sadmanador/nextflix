@@ -5,7 +5,7 @@ import axios from "axios";
 import { Video } from "@/types";
 import Layout from "@/components/Layout/Layout";
 
-export default function DetailsTvShowPage() {
+const DetailsTvShowPage = () => {
   const pathname = usePathname();
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
@@ -39,7 +39,6 @@ export default function DetailsTvShowPage() {
     }
   }, [movieId]);
 
-
   return (
     <Layout>
       <div
@@ -68,4 +67,6 @@ export default function DetailsTvShowPage() {
       </div>
     </Layout>
   );
-}
+};
+
+export default DetailsTvShowPage;

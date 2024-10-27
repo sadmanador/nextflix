@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 
-export default function useScrollLimit(limit: number): boolean {
+const useScrollLimit = (limit: number): boolean =>{
   const [reached, setReached] = useState<boolean>(false);
 
   useEffect(() => {
@@ -16,3 +16,4 @@ export default function useScrollLimit(limit: number): boolean {
 
   return reached;
 }
+export default useScrollLimit

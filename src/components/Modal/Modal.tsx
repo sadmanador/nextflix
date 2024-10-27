@@ -22,7 +22,7 @@ function renderGenre(genre_ids: number[], genres: Genre[]): string[] {
   return genre_ids.map((id) => genreMap[id]).filter((name) => name);
 }
 
-export default function Modal() {
+const Modal = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -142,7 +142,8 @@ export default function Modal() {
               left: 0,
               width: "100%",
               height: "100%",
-              backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent 80%)",
+              backgroundImage:
+                "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent 80%)",
             }}
           >
             <Box sx={{ padding: "2rem 3rem" }}>
@@ -150,7 +151,12 @@ export default function Modal() {
                 {title || name || original_name}
               </Typography>
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                <Button label="Play" filled Icon={Play} onClick={handlePlayClick} />
+                <Button
+                  label="Play"
+                  filled
+                  Icon={Play}
+                  onClick={handlePlayClick}
+                />
                 <IconButton>
                   <Add />
                 </IconButton>
@@ -161,7 +167,9 @@ export default function Modal() {
                   <Dislike />
                 </IconButton>
               </Box>
-              <Typography sx={{ color: "success.main", fontWeight: "bold", mt: 1 }}>
+              <Typography
+                sx={{ color: "success.main", fontWeight: "bold", mt: 1 }}
+              >
                 {Math.round(vote_average * 10)}% Match
               </Typography>
             </Box>
@@ -179,7 +187,14 @@ export default function Modal() {
         >
           <CloseIcon />
         </IconButton>
-        <Box sx={{ padding: "2rem 3rem", display: "flex", flexDirection: "row", gap: 4 }}>
+        <Box
+          sx={{
+            padding: "2rem 3rem",
+            display: "flex",
+            flexDirection: "row",
+            gap: 4,
+          }}
+        >
           <Box sx={{ flex: 1 }}>
             <Typography>{overview}</Typography>
           </Box>
@@ -198,8 +213,9 @@ export default function Modal() {
         >
           Similar {mediaType === "movie" ? "Movies" : "TV Shows"}
         </Typography>
-        <SimilarMedia mediaType={mediaType} id={id}/>
+        <SimilarMedia mediaType={mediaType} id={id} />
       </Box>
     </Box>
   );
-}
+};
+export default Modal;

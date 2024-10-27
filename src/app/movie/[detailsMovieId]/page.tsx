@@ -5,7 +5,7 @@ import axios from "axios";
 import Layout from "@/components/Layout/Layout";
 import { Video } from "@/types";
 
-export default function DetailsMoviePage() {
+const DetailsMoviePage = () => {
   const pathname = usePathname();
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -64,4 +64,6 @@ export default function DetailsMoviePage() {
       </div>
     </Layout>
   );
-}
+};
+
+export default DetailsMoviePage;

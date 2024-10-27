@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import useExternalClick from "./hooks/useExternalClick";
 import { DialogProps } from "./types";
 
-export default function Dialog(props: DialogProps): React.ReactElement {
+const Dialog = (props: DialogProps): React.ReactElement => {
   const { visible, classname, onClose, dialogRef, children } = props;
 
   useExternalClick(dialogRef, () => {
@@ -24,4 +24,6 @@ export default function Dialog(props: DialogProps): React.ReactElement {
       )}
     </>
   );
-}
+};
+
+export default Dialog;

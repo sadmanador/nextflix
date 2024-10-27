@@ -10,11 +10,7 @@ import handleAddToLocalStorage from "@/utils/localStorage";
 import { useRouter } from "next/navigation";
 import { getMovie } from "@/utils/apiService";
 
-
-
-export default function TopMovies({
-  item,
-}: TopMoviesProps): React.ReactElement {
+const TopMovies = ({ item }: TopMoviesProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
@@ -49,7 +45,7 @@ export default function TopMovies({
     const res = await getMovie(`/movie/${id}/videos`);
     if (res.error) {
       setError(res.error.message);
-      console.log(error)
+      console.log(error);
     } else {
       const trailer = (res.data?.results as unknown as Video[]).find(
         (video) => video.type === "Trailer"
@@ -67,7 +63,7 @@ export default function TopMovies({
 
   return (
     <div
-      className={styles.card} // Switch from longCard to card
+      className={styles.card}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -77,7 +73,7 @@ export default function TopMovies({
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className={styles.cardPoster} // Poster style remains the same
+          className={styles.cardPoster}
         ></iframe>
       ) : (
         <Image
@@ -85,7 +81,7 @@ export default function TopMovies({
           height={350}
           src={image}
           alt="Top movie poster"
-          className={styles.cardPoster} // Poster style remains the same
+          className={styles.cardPoster}
         />
       )}
       <div className={styles.cardInfo}>
@@ -121,42 +117,5 @@ export default function TopMovies({
       </div>
     </div>
   );
-}
-
-// function renderGenre(genres: Genre[] | undefined, genreIds: number[] | undefined) {
-//   // Early return if both genres and genreIds are not provided
-//   if (!genres && !genreIds) return null;
-
-//   // Create a genre map only if genres are defined
-//   const genreMap: { [key: number]: string } = genres
-//     ? genres.reduce((acc: { [key: number]: string }, genre: Genre) => {
-//         acc[genre.id] = genre.name;
-//         return acc;
-//       }, {})
-//     : {};
-
-//   // Filter valid genreIds only if genreMap is available
-//   const validGenres = genreIds && genreMap ? genreIds.filter((id) => genreMap[id]) : [];
-
-//   return (
-//     <div className={styles.row}>
-//       {genres && genres.length > 0
-//         ? genres.map((genre, index) => (
-//             <div key={genre.id} className={styles.row}>
-//               <span className={styles.regularText} style={{ color: "white" }}>
-//                 {genre.name}
-//               </span>
-//               {index < genres.length - 1 && <div className={styles.dot}>&bull;</div>}
-//             </div>
-//           ))
-//         : validGenres.map((id, index) => (
-//             <div key={id} className={styles.row}>
-//               <span className={styles.regularText} style={{ color: "white" }}>
-//                 {genreMap[id]}
-//               </span>
-//               {index < validGenres.length - 1 && <div className={styles.dot}>&bull;</div>}
-//             </div>
-//           ))}
-//     </div>
-//   );
-// }
+};
+export default TopMovies;

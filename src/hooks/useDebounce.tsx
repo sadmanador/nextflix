@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface DebounceProps {
   input: string;
   delay: number;
 }
 
-export default function useDebounce({ input, delay }: DebounceProps) {
+const useDebounce = ({ input, delay }: DebounceProps) => {
   const [debounceValue, setDebounceValue] = useState<string>(input);
 
   useEffect(() => {
@@ -17,4 +17,5 @@ export default function useDebounce({ input, delay }: DebounceProps) {
   }, [delay, input]);
 
   return debounceValue;
-}
+};
+export default useDebounce;

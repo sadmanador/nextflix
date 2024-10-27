@@ -9,12 +9,11 @@ import { FeatureCardProps, Genre, Media, Video } from "../../types";
 import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
 import Button from "../Button";
 
-
-export default function FeatureCard({
+const FeatureCard = ({
   index,
   item,
   mediaType,
-}: FeatureCardProps): React.ReactElement {
+}: FeatureCardProps): React.ReactElement => {
   const {
     title,
     name,
@@ -70,7 +69,7 @@ export default function FeatureCard({
     const res = await getMovie(`/genre/${mediaType}/list`);
     if (res.error) {
       setError(res.error.message);
-      console.log(error)
+      console.log(error);
     } else {
       setGenres(res.data?.genres || []);
     }
@@ -151,7 +150,7 @@ export default function FeatureCard({
       </div>
     </div>
   );
-}
+};
 
 function renderGenre(genre_ids: number[], genres: Genre[]) {
   const genreMap = genres.reduce(
@@ -179,3 +178,4 @@ function renderGenre(genre_ids: number[], genres: Genre[]) {
     </div>
   );
 }
+export default FeatureCard;

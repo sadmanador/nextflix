@@ -7,7 +7,7 @@ import Footer from "../Footer/Footer";
 
 const SCROLL_LIMIT: number = 80;
 
-export default function Layout({ children }: ChildrenProvider) {
+const Layout = ({ children }: ChildrenProvider) => {
   const isScrolled: boolean = useScrollLimit(SCROLL_LIMIT);
   return (
     <div className={styles.container}>
@@ -16,4 +16,5 @@ export default function Layout({ children }: ChildrenProvider) {
       <Footer />
     </div>
   );
-}
+};
+export default Layout;

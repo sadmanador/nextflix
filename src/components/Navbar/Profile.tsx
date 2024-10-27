@@ -1,17 +1,15 @@
-"use client"
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import router from 'next/router';
-import { Maybe } from '../../types';
-import { ROUTES } from '../../config/route';
-import { CaretDown } from '../../utils/icons';
-import styles from '../../styles/Navbar.module.scss';
-import Dialog from '@/Dialog';
-import Image from 'next/image';
+"use client";
+import React, { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import router from "next/router";
+import { Maybe } from "../../types";
+import { ROUTES } from "../../config/route";
+import { CaretDown } from "../../utils/icons";
+import styles from "../../styles/Navbar.module.scss";
+import Dialog from "@/Dialog";
+import Image from "next/image";
 
-
-
-export default function Profile(): React.ReactElement {
+const Profile = (): React.ReactElement => {
   const [visible, setVisible] = useState<boolean>(false);
   const profileRef = useRef<Maybe<HTMLDivElement>>(null);
 
@@ -24,27 +22,39 @@ export default function Profile(): React.ReactElement {
   const onSignout = (): Promise<boolean> => router.push(ROUTES.HOME);
 
   const caretAnimation = {
-    animate: visible ? 'up' : 'down',
+    animate: visible ? "up" : "down",
     variants: {
       up: {
-        rotate: 180
+        rotate: 180,
       },
       down: {
-        rotate: 0
-      }
+        rotate: 0,
+      },
     },
-    transition: { duration: 0.25 }
+    transition: { duration: 0.25 },
   };
 
   return (
     <div className={styles.profile} onMouseOver={onHover}>
-      <Image width={30} height={30} src='/assets/avatar.png' alt='user' className={styles.user} />
+      <Image
+        width={30}
+        height={30}
+        src="/assets/avatar.png"
+        alt="user"
+        className={styles.user}
+      />
       <motion.div {...caretAnimation}>
         <CaretDown />
       </motion.div>
-      <Dialog dialogRef={profileRef} onClose={onClose} classname={styles.signout} visible={visible}>
+      <Dialog
+        dialogRef={profileRef}
+        onClose={onClose}
+        classname={styles.signout}
+        visible={visible}
+      >
         <div onClick={onSignout}>Sign out</div>
       </Dialog>
     </div>
   );
-}
+};
+export default Profile;

@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { isDesktop, isTablet } from "react-device-detect";
-
 import { Breakpoint, BreakpointValues } from "../config/breakpoints";
 import { DimensionDetail } from "../types";
 
-export default function useDimensions(): DimensionDetail {
+const useDimensions = (): DimensionDetail => {
   const [dimension, setDimension] = useState<DimensionDetail["dimension"]>({
     height: 0,
     width: 0,
@@ -38,7 +37,7 @@ export default function useDimensions(): DimensionDetail {
     isTablet,
     isDesktop,
   };
-}
+};
 
 function getBreakpoint(currentWidth: number): Breakpoint {
   const width: number = currentWidth || getInitialBreakpointValues();
@@ -75,3 +74,4 @@ function getInitialBreakpointValues(): number {
 
   return BreakpointValues.SM;
 }
+export default useDimensions;

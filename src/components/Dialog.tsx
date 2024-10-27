@@ -3,13 +3,13 @@ import useExternalClick from "@/hooks/useExternalClick";
 import { DialogProps } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Dialog({
+const Dialog = ({
   visible,
   classname,
   onClose,
   dialogRef,
   children,
-}: DialogProps): React.ReactElement {
+}: DialogProps): React.ReactElement => {
   useExternalClick(dialogRef, onClose);
 
   return (
@@ -28,4 +28,5 @@ export default function Dialog({
       )}
     </AnimatePresence>
   );
-}
+};
+export default Dialog;
