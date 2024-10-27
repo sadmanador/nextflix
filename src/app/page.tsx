@@ -39,7 +39,7 @@ const sections: Section[] = [
   {
     heading: "Top 10 Movies in US Today",
     endpoint: "/movie/top_rated?language=en-US&page=1",
-    topList: true,
+   
     mediaType: "movie",
   },
   {
@@ -55,7 +55,6 @@ const sections: Section[] = [
   {
     heading: "Only on Netflix",
     endpoint: "/discover/tv?language=en-US&page=1",
-    defaultCard: false,
     mediaType: "tv",
   },
   {
@@ -71,7 +70,6 @@ const sections: Section[] = [
   {
     heading: "Top 10 TV Shows in US Today",
     endpoint: "/tv/top_rated?language=en-US&page=1",
-    topList: true,
     mediaType: "tv",
   },
   {
