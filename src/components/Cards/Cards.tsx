@@ -33,7 +33,7 @@ const Cards = ({
   const [isInLocalStorage, setIsInLocalStorage] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState(true); // New state for mute/unmute
+  const [isMuted, setIsMuted] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -42,6 +42,8 @@ const Cards = ({
       isItemInLocalStorage(item.id, item.title ? "movie" : "tv")
     );
   }, []);
+
+  console.log(item);
 
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
@@ -52,15 +54,8 @@ const Cards = ({
   const style = defaultCard ? styles.card : styles.longCard;
   const infoStyle = defaultCard ? styles.cardInfo : styles.more;
 
-  const {
-    title,
-    poster_path,
-    backdrop_path,
-    vote_average,
-    genre_ids,
-    id,
-    name,
-  } = item;
+  const { title, poster_path, backdrop_path, vote_average, genre_ids, id } =
+    item;
 
   const image = defaultCard
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
@@ -112,7 +107,7 @@ const Cards = ({
     const mediaItem: MediaItem = {
       id,
       type: mediaType,
-      title: title || name,
+      title: title,
     };
 
     if (isInLocalStorage) {
@@ -124,12 +119,13 @@ const Cards = ({
   };
 
   const toggleMute = () => {
-    setIsMuted((prev) => !prev); // Toggle mute state
+    setIsMuted((prev) => !prev);
   };
 
   return (
     <div
       className={style}
+      style={{ backgroundColor: "#252525" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -180,7 +176,7 @@ const Cards = ({
           <Button Icon={Down} rounded onClick={() => onClickModal(item)} />
         </div>
         <div className={styles.textDetails}>
-          <strong>{title || name}</strong>
+          <strong>{title}</strong>
           <div className={styles.row}>
             <span className={styles.greenText}>{`${Math.round(
               vote_average * 10

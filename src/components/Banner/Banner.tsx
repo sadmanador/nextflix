@@ -35,37 +35,38 @@ const Banner: React.FC = () => {
   };
 
   const loadMedia = async () => {
- 
-      const result = await getMovie("/movie/top_rated?language=en-US&page=1");
+    const result = await getMovie("/movie/top_rated?language=en-US&page=1");
 
-      if (result && result.data && result.data.results) {
-        const randomIndex = Math.floor(
-          Math.random() * result.data.results.length
-        );
-        const selectedMedia: Media = result.data.results[randomIndex]; // Specify type here
-        setMedia(selectedMedia);
+    if (result && result.data && result.data.results) {
+      const randomIndex = Math.floor(
+        Math.random() * result.data.results.length
+      );
+      const selectedMedia: Media = result.data.results[randomIndex];
+      setMedia(selectedMedia);
 
-        const trailerResponse = await getMovie(
-          `/movie/${selectedMedia.id}/videos`
-        );
+      const trailerResponse = await getMovie(
+        `/movie/${selectedMedia.id}/videos`
+      );
 
-        if (
-          trailerResponse &&
-          trailerResponse.data &&
-          Array.isArray(trailerResponse.data.results)
-        ) {
-          const videos = trailerResponse.data.results;
-          const trailer = videos.find((video) => video.type === "Trailer");
-          setTrailerKey(trailer?.key || null);
-        }
-      } else {
-        console.error("No data found in the response");
+      if (
+        trailerResponse &&
+        trailerResponse.data &&
+        Array.isArray(trailerResponse.data.results)
+      ) {
+        const videos = trailerResponse.data.results;
+        const trailer = videos.find((video) => video.type === "Trailer");
+        setTrailerKey(trailer?.key || null);
       }
+    } else {
+      console.error("No data found in the response");
+    }
   };
 
   useEffect(() => {
     loadMedia();
   }, []);
+
+  console.log("Banner", media, "Trailer_key:", trailerKey);
 
   return (
     <Box
@@ -127,6 +128,9 @@ const Banner: React.FC = () => {
                 borderLeft: "2px solid white",
                 backgroundColor: "rgba(0, 0, 0, 0.5)",
                 color: "white",
+                fontSize: "16px",
+                padding: ".5rem 3rem .5rem .5rem",
+                borderRadius : "0"
               }}
             >
               18+
@@ -165,7 +169,7 @@ const Banner: React.FC = () => {
             fontSize: { xs: "2.2rem", md: "2.8rem" },
           }}
         >
-          {media?.title || media?.name}
+          {media?.title}
         </Typography>
         <Typography
           sx={{

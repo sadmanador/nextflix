@@ -48,20 +48,23 @@ export type Genre = {
 };
 
 export type Media = {
-  id: number;
-  name: string;
-  title?: string;
-  original_name: string;
-  overview: string;
-  poster_path: string;
+  adult: boolean;
   backdrop_path: string;
-  vote_average: number;
   genre_ids: number[];
-  genres?: Genre[];
-  origin_country: string[];
-  first_air_date?: string;
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string,
+  title: string;
+  video: boolean,
+  vote_average: number;
+  vote_count: number;
   key?: string;
   type?: string;
+  genres?: Genre[];
 };
 
 export type MoviesResponse = {
@@ -119,7 +122,6 @@ export type NavbarProps = {
 
 export type SimilarMediaProps = {
   id: number;
-  mediaType: string;
 };
 
 export type TopMoviesProps = {
@@ -136,5 +138,5 @@ export type Modal = {
 
 export type AudioControl = {
   mute: () => void;
-  unMute: () => void; 
+  unMute: () => void;
 };

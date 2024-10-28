@@ -49,7 +49,7 @@ const DetailsMoviePage = () => {
           <p style={{ color: "white" }}>Loading trailer...</p>
         ) : trailerKey ? (
           <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&modestbranding=1&showinfo=0`}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&modestbranding=1`}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

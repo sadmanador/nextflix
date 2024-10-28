@@ -1,5 +1,7 @@
 import { getMovie } from "@/utils/apiService";
-import handleAddToLocalStorage, { handleRemoveFromLocalStorage } from "@/utils/localStorage";
+import handleAddToLocalStorage, {
+  handleRemoveFromLocalStorage,
+} from "@/utils/localStorage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -9,11 +11,14 @@ import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
 import { Add, Dislike, Down, Like, Play, Tick } from "../../utils/icons";
 import Button from "../Button/Button";
 
-const TopMovies = ({ item, removeMovie }: TopMoviesProps): React.ReactElement => {
+const TopMovies = ({
+  item,
+  removeMovie,
+}: TopMoviesProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
-  const { title, poster_path, vote_average, id, name } = item;
+  const { title, poster_path, vote_average, id } = item;
   const [isMounted, setIsMounted] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +31,9 @@ const TopMovies = ({ item, removeMovie }: TopMoviesProps): React.ReactElement =>
     const existingItems: MediaItem[] = JSON.parse(
       localStorage.getItem("favoriteItems") || "[]"
     );
-    setIsInLocalStorage(existingItems.some((existingItem) => existingItem.id === id));
+    setIsInLocalStorage(
+      existingItems.some((existingItem) => existingItem.id === id)
+    );
   }, [id]);
 
   const mediaType = title ? "movie" : "tv";
@@ -41,7 +48,7 @@ const TopMovies = ({ item, removeMovie }: TopMoviesProps): React.ReactElement =>
     const mediaItem: MediaItem = {
       id,
       type: mediaType,
-      title: title || name,
+      title,
     };
 
     if (isInLocalStorage) {
@@ -118,7 +125,7 @@ const TopMovies = ({ item, removeMovie }: TopMoviesProps): React.ReactElement =>
         </div>
         <div className={styles.textDetails}>
           <strong style={{ color: "white", fontSize: "16px" }}>
-            {title || name}
+            {title}
           </strong>
           <div className={styles.row}>
             <span className={styles.greenText}>{`${Math.round(
