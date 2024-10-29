@@ -18,6 +18,7 @@ import {
   AiOutlineDislike as Dislike,
 } from "react-icons/ai";
 import { GoMute as Mute, GoUnmute as Unmute } from "react-icons/go";
+import { FaAngleRight as Next } from "react-icons/fa6";
 
 
 export {
@@ -36,4 +37,5 @@ export {
   Tick,
   Mute,
   Unmute,
+  Next
 };
