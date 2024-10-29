@@ -5,7 +5,7 @@ import axios from "axios";
 import Layout from "@/components/Layout/Layout";
 import { Video } from "@/types";
 
-export default function DetailsMoviePage() {
+const DetailsMoviePage = () => {
   const pathname = usePathname();
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,7 +49,7 @@ export default function DetailsMoviePage() {
           <p style={{ color: "white" }}>Loading trailer...</p>
         ) : trailerKey ? (
           <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&modestbranding=1&showinfo=0`}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&modestbranding=1`}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -64,4 +64,6 @@ export default function DetailsMoviePage() {
       </div>
     </Layout>
   );
-}
+};
+
+export default DetailsMoviePage;

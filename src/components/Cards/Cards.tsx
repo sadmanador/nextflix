@@ -1,50 +1,61 @@
 "use client";
 import { getMovie } from "@/utils/apiService";
-import handleAddToLocalStorage from "@/utils/localStorage";
+import handleAddToLocalStorage, {
+  handleRemoveFromLocalStorage,
+  isItemInLocalStorage,
+} from "@/utils/localStorage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import styles from "../../styles/Cards.module.scss";
 import { CardsProps, Genre, Media, MediaItem, Video } from "../../types";
-import { Add, Dislike, Down, Like, Play } from "../../utils/icons";
-import Button from "../Button";
+import {
+  Add,
+  Dislike,
+  Down,
+  Like,
+  Play,
+  Tick,
+  Mute,
+  Unmute,
+} from "../../utils/icons";
+import Button from "../Button/Button";
 
-export default function Cards({
+const Cards = ({
   defaultCard = true,
   item,
-  mediaType,
-}: CardsProps): React.ReactElement {
+}: CardsProps): React.ReactElement => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isInLocalStorage, setIsInLocalStorage] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
+    setIsInLocalStorage(
+      isItemInLocalStorage(item.id, item.title ? "movie" : "tv")
+    );
   }, []);
+
+  console.log(item);
 
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
-      router.push(`/${mediaType}/${item.id}`);
+      router.push(`/movie/${item.id}`);
     }
   };
 
   const style = defaultCard ? styles.card : styles.longCard;
   const infoStyle = defaultCard ? styles.cardInfo : styles.more;
 
-  const {
-    title,
-    poster_path,
-    backdrop_path,
-    vote_average,
-    genre_ids,
-    id,
-    name,
-  } = item;
+  const { title, poster_path, backdrop_path, vote_average, genre_ids, id } =
+    item;
 
   const image = defaultCard
     ? `https://image.tmdb.org/t/p/original${backdrop_path}`
@@ -57,11 +68,7 @@ export default function Cards({
     setIsModal(true);
   };
 
-  console.log("Cards genres", genres);
-  console.log("Cards trailers", trailerKey);
-
   const fetchGenres = async () => {
-
     const res = await getMovie("/genre/movie/list");
     if (res.error) {
       setError(res.error.message);
@@ -69,14 +76,13 @@ export default function Cards({
       setGenres(res.data?.genres || []);
     }
     setLoading(false);
-    
   };
 
   const fetchTrailer = async () => {
-    const res = await getMovie(`/${mediaType}/${id}/videos`);
+    const res = await getMovie(`/movie/${id}/videos`);
     if (res.error) {
       setError(res.error.message);
-      console.log(error)
+      console.log(error);
     } else {
       const trailer = (res.data?.results as unknown as Video[]).find(
         (video) => video.type === "Trailer"
@@ -96,20 +102,52 @@ export default function Cards({
     }
   }, [isHovered]);
 
+  const handleAddOrRemove = () => {
+    const mediaType = title ? "movie" : "tv";
+    const mediaItem: MediaItem = {
+      id,
+      type: mediaType,
+      title: title,
+    };
+
+    if (isInLocalStorage) {
+      handleRemoveFromLocalStorage(mediaItem);
+    } else {
+      handleAddToLocalStorage(mediaItem);
+    }
+    setIsInLocalStorage(!isInLocalStorage);
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
+  };
+
   return (
     <div
       className={style}
+      style={{ backgroundColor: "#252525" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {isHovered && trailerKey ? (
-        <iframe
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&modestbranding=1&showinfo=0`}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className={styles.cardPoster}
-        ></iframe>
+        <div className={styles.videoContainer}>
+          <iframe
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=${
+              isMuted ? 1 : 0
+            }&controls=0&modestbranding=1&showinfo=0`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className={styles.cardPoster}
+          ></iframe>
+          <div className={styles.muteButton}>
+            <Button
+              Icon={isMuted ? Mute : Unmute}
+              rounded
+              onClick={toggleMute}
+            />
+          </div>
+        </div>
       ) : (
         <Image
           width={450}
@@ -124,18 +162,10 @@ export default function Cards({
           <div className={styles.actionRow}>
             <Button Icon={Play} rounded filled onClick={handlePlayClick} />
             <Button
-              Icon={Add}
+              Icon={isInLocalStorage ? Tick : Add}
               rounded
-              onClick={() => {
-                const mediaType = title ? "movie" : "tv";
-                const mediaItem: MediaItem = {
-                  id,
-                  type: mediaType,
-                  title: title || name,
-                };
-                handleAddToLocalStorage(mediaItem);
-              }}
-            />{" "}
+              onClick={handleAddOrRemove}
+            />
             {defaultCard && (
               <>
                 <Button Icon={Like} rounded />
@@ -146,7 +176,7 @@ export default function Cards({
           <Button Icon={Down} rounded onClick={() => onClickModal(item)} />
         </div>
         <div className={styles.textDetails}>
-          <strong>{title || name}</strong>
+          <strong>{title}</strong>
           <div className={styles.row}>
             <span className={styles.greenText}>{`${Math.round(
               vote_average * 10
@@ -157,7 +187,7 @@ export default function Cards({
       </div>
     </div>
   );
-}
+};
 
 function renderGenre(genre_ids: number[], genres: Genre[]) {
   const genreMap = genres.reduce(
@@ -185,3 +215,5 @@ function renderGenre(genre_ids: number[], genres: Genre[]) {
     </div>
   );
 }
+
+export default Cards;

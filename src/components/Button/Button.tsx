@@ -1,10 +1,8 @@
 import { ButtonProps } from "@/types";
 import styles from "../../styles/Button.module.scss";
 
-
-
-export default function Button(props: ButtonProps): React.ReactElement | null {
-  const { filled, label, Icon, rounded, onClick, hidden } = props; 
+const Button = (props: ButtonProps): React.ReactElement | null => {
+  const { filled, label, Icon, rounded, onClick, hidden } = props;
 
   const backgroundColor = filled ? "white" : "#6d6d6db3";
   const fontColor = filled ? "black" : "white";
@@ -14,7 +12,6 @@ export default function Button(props: ButtonProps): React.ReactElement | null {
     : filled
     ? styles.roundButton
     : styles.outlineRounded;
-
 
   if (hidden) {
     return null;
@@ -30,4 +27,5 @@ export default function Button(props: ButtonProps): React.ReactElement | null {
       {!rounded && <span className={styles.label}>{label}</span>}
     </button>
   );
-}
+};
+export default Button;

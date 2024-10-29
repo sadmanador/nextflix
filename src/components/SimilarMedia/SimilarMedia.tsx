@@ -1,16 +1,16 @@
 import { Media, SimilarMediaProps } from "@/types";
 import { getMovie } from "@/utils/apiService";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import styles from "../../styles/SimilarMedia.module.scss";
-import Cards from "../Cards/Cards";
+import SimilarMediaCard from "../SimilarMediaCard/SimilarMediaCard";
 
-const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
+const SimilarMedia = ({ id }: SimilarMediaProps) => {
   const [similarMovies, setSimilarMovies] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchSimilarMovies = async () => {
-    const res = await getMovie(`/${mediaType}/${id}/similar`);
+    const res = await getMovie(`/movie/${id}/similar`);
     if (res.error) {
       setError(res.error.message);
     } else {
@@ -19,39 +19,37 @@ const SimilarMedia = ({ id, mediaType }: SimilarMediaProps) => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchSimilarMovies();
   }, []);
 
   if (loading) {
-    return (
-      <p>Loading similar {mediaType === "movie" ? "movies" : "TV shows"}...</p>
-    );
+    return <Typography>Loading similar movies...</Typography>;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <Typography>Error: {error}</Typography>;
   }
 
   return (
-    <div className="similar-media">
-      <div className={styles.mediaContainer}>
+    <Box sx={{ padding: 2, overflowX: "auto", }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gap: "12px",
+        }}
+      >
         {similarMovies.length > 0 ? (
-          similarMovies.map((item) => (
-            <Cards
-              key={item.id}
-              defaultCard={false}
-              item={item}
-              mediaType={mediaType}
-            />
-          ))
+          similarMovies
+            .filter((movie) => movie.poster_path)
+            .map((item) => <SimilarMediaCard key={item.id} item={item} />)
         ) : (
-          <p>
-            No similar {mediaType === "movie" ? "movies" : "TV shows"} found.
-          </p>
+          <Typography>No similar movies found.</Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

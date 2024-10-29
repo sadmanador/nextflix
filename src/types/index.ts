@@ -34,7 +34,7 @@ export type ButtonProps = {
 export type CardsProps = {
   defaultCard?: boolean;
   item: Media;
-  mediaType: string;
+  mediaType?: string;
 };
 
 export enum MediaType {
@@ -48,27 +48,32 @@ export type Genre = {
 };
 
 export type Media = {
-  id: number;
-  name: string;
-  title?: string;
-  original_name: string;
-  overview: string;
-  poster_path: string;
+  adult: boolean;
   backdrop_path: string;
-  vote_average: number;
   genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string,
+  title: string;
+  video: boolean,
+  vote_average: number;
+  vote_count: number;
+  key?: string;
+  type?: string;
   genres?: Genre[];
-  origin_country: string[];
-  first_air_date?: string;
 };
 
 export type MoviesResponse = {
   page: number;
   total_results: number;
   total_pages: number;
-  genres?: []
+  genres?: [];
   results: Media[];
-}
+};
 
 export type ImageType = "poster" | "original";
 
@@ -77,17 +82,15 @@ export type Section = {
   endpoint: string;
   defaultCard?: boolean;
   topList?: boolean;
-  mediaType: "movie" | "tv";
 };
 
 export type Video = {
   id: string;
   key: string;
+  type: string;
   name: string;
   site: string;
-  type: string;
 };
-
 
 export type MediaItem = {
   id: number;
@@ -110,7 +113,7 @@ export type MovieSectionProps = {
   heading: string;
   topList?: boolean;
   endpoint: string;
-  mediaType: string;
+  mediaType?: string;
 };
 
 export type NavbarProps = {
@@ -119,11 +122,11 @@ export type NavbarProps = {
 
 export type SimilarMediaProps = {
   id: number;
-  mediaType: string;
 };
 
 export type TopMoviesProps = {
   item: Media;
+  removeMovie: (id: number) => void;
 };
 
 export type Modal = {
@@ -131,4 +134,9 @@ export type Modal = {
   setModalData: (item: Media) => void;
   isModal: boolean;
   setIsModal: (isModal: boolean) => void;
+};
+
+export type AudioControl = {
+  mute: () => void;
+  unMute: () => void;
 };

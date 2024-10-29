@@ -1,38 +1,63 @@
-"use client";
-import { useContext, useEffect, useState } from "react";
-import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
-import styles from "../../styles/Cards.module.scss";
-import { ModalContext } from "../../context/ModalContext";
-import { Add, Play, Down, Like, Dislike } from "../../utils/icons";
-import Image from "next/image";
-import Button from "../Button";
-import handleAddToLocalStorage from "@/utils/localStorage";
-import { useRouter } from "next/navigation";
 import { getMovie } from "@/utils/apiService";
+import handleAddToLocalStorage, {
+  handleRemoveFromLocalStorage,
+} from "@/utils/localStorage";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { ModalContext } from "../../context/ModalContext";
+import styles from "../../styles/Cards.module.scss";
+import { Media, MediaItem, TopMoviesProps, Video } from "../../types";
+import { Add, Dislike, Down, Like, Play, Tick } from "../../utils/icons";
+import Button from "../Button/Button";
 
-
-
-export default function TopMovies({
+const TopMovies = ({
   item,
-}: TopMoviesProps): React.ReactElement {
+  removeMovie,
+}: TopMoviesProps): React.ReactElement => {
   const [isHovered, setIsHovered] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const { setModalData, setIsModal } = useContext(ModalContext);
-  const { title, poster_path, vote_average, id, name } = item;
+  const { title, poster_path, vote_average, id } = item;
   const [isMounted, setIsMounted] = useState(false);
   const [, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [isInLocalStorage, setIsInLocalStorage] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+
+    const existingItems: MediaItem[] = JSON.parse(
+      localStorage.getItem("favoriteItems") || "[]"
+    );
+    setIsInLocalStorage(
+      existingItems.some((existingItem) => existingItem.id === id)
+    );
+  }, [id]);
 
   const mediaType = title ? "movie" : "tv";
 
   const handlePlayClick = () => {
     if (item?.id && isMounted) {
       router.push(`/${mediaType}/${item.id}`);
+    }
+  };
+
+  const handleFavoriteToggle = () => {
+    const mediaItem: MediaItem = {
+      id,
+      type: mediaType,
+      title,
+    };
+
+    if (isInLocalStorage) {
+      handleRemoveFromLocalStorage(mediaItem);
+      setIsInLocalStorage(false);
+      removeMovie(mediaItem.id);
+    } else {
+      handleAddToLocalStorage(mediaItem);
+      setIsInLocalStorage(true);
     }
   };
 
@@ -43,13 +68,11 @@ export default function TopMovies({
     setIsModal(true);
   };
 
-  console.log("Top Movies", trailerKey);
-
   const fetchTrailer = async () => {
     const res = await getMovie(`/movie/${id}/videos`);
     if (res.error) {
       setError(res.error.message);
-      console.log(error)
+      console.log(error);
     } else {
       const trailer = (res.data?.results as unknown as Video[]).find(
         (video) => video.type === "Trailer"
@@ -63,11 +86,11 @@ export default function TopMovies({
     if (isHovered) {
       fetchTrailer();
     }
-  });
+  }, [isHovered]);
 
   return (
     <div
-      className={styles.card} // Switch from longCard to card
+      className={styles.card}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -77,7 +100,7 @@ export default function TopMovies({
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className={styles.cardPoster} // Poster style remains the same
+          className={styles.cardPoster}
         ></iframe>
       ) : (
         <Image
@@ -85,24 +108,16 @@ export default function TopMovies({
           height={350}
           src={image}
           alt="Top movie poster"
-          className={styles.cardPoster} // Poster style remains the same
+          className={styles.cardPoster}
         />
       )}
       <div className={styles.cardInfo}>
         <div className={styles.actionRow}>
           <Button Icon={Play} rounded filled onClick={handlePlayClick} />
           <Button
-            Icon={Add}
+            Icon={isInLocalStorage ? Tick : Add}
             rounded
-            onClick={() => {
-              const mediaType = title ? "movie" : "tv";
-              const mediaItem: MediaItem = {
-                id,
-                type: mediaType,
-                title: title || name,
-              };
-              handleAddToLocalStorage(mediaItem);
-            }}
+            onClick={handleFavoriteToggle}
           />
           <Button Icon={Like} rounded />
           <Button Icon={Dislike} rounded />
@@ -110,7 +125,7 @@ export default function TopMovies({
         </div>
         <div className={styles.textDetails}>
           <strong style={{ color: "white", fontSize: "16px" }}>
-            {title || name}
+            {title}
           </strong>
           <div className={styles.row}>
             <span className={styles.greenText}>{`${Math.round(
@@ -121,42 +136,6 @@ export default function TopMovies({
       </div>
     </div>
   );
-}
+};
 
-// function renderGenre(genres: Genre[] | undefined, genreIds: number[] | undefined) {
-//   // Early return if both genres and genreIds are not provided
-//   if (!genres && !genreIds) return null;
-
-//   // Create a genre map only if genres are defined
-//   const genreMap: { [key: number]: string } = genres
-//     ? genres.reduce((acc: { [key: number]: string }, genre: Genre) => {
-//         acc[genre.id] = genre.name;
-//         return acc;
-//       }, {})
-//     : {};
-
-//   // Filter valid genreIds only if genreMap is available
-//   const validGenres = genreIds && genreMap ? genreIds.filter((id) => genreMap[id]) : [];
-
-//   return (
-//     <div className={styles.row}>
-//       {genres && genres.length > 0
-//         ? genres.map((genre, index) => (
-//             <div key={genre.id} className={styles.row}>
-//               <span className={styles.regularText} style={{ color: "white" }}>
-//                 {genre.name}
-//               </span>
-//               {index < genres.length - 1 && <div className={styles.dot}>&bull;</div>}
-//             </div>
-//           ))
-//         : validGenres.map((id, index) => (
-//             <div key={id} className={styles.row}>
-//               <span className={styles.regularText} style={{ color: "white" }}>
-//                 {genreMap[id]}
-//               </span>
-//               {index < validGenres.length - 1 && <div className={styles.dot}>&bull;</div>}
-//             </div>
-//           ))}
-//     </div>
-//   );
-// }
+export default TopMovies;

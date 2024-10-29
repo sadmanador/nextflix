@@ -1,4 +1,8 @@
-import { BiInfoCircle as Info, BiCaretDown as CaretDown } from 'react-icons/bi';
+import {
+  BiInfoCircle as Info,
+  BiCaretDown as CaretDown,
+  BiCheck as Tick,
+} from "react-icons/bi";
 import {
   IoPlaySharp as Play,
   IoSearch as Search,
@@ -7,8 +11,31 @@ import {
   IoChevronDown as Down,
   IoLogoLinkedin as Linkedin,
   IoLogoTwitter as Twitter,
-  IoLogoGithub as Github
-} from 'react-icons/io5';
-import { AiOutlineLike as Like, AiOutlineDislike as Dislike } from 'react-icons/ai';
+  IoLogoGithub as Github,
+} from "react-icons/io5";
+import {
+  AiOutlineLike as Like,
+  AiOutlineDislike as Dislike,
+} from "react-icons/ai";
+import { GoMute as Mute, GoUnmute as Unmute } from "react-icons/go";
+import { FaAngleRight as Next } from "react-icons/fa6";
 
-export { Info, CaretDown, Play, Search, Notifications, Add, Down, Like, Dislike, Linkedin, Twitter, Github };
+
+export {
+  Info,
+  CaretDown,
+  Play,
+  Search,
+  Notifications,
+  Add,
+  Down,
+  Like,
+  Dislike,
+  Linkedin,
+  Twitter,
+  Github,
+  Tick,
+  Mute,
+  Unmute,
+  Next
+};

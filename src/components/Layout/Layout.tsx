@@ -1,19 +1,25 @@
 import React from "react";
-import useScrollLimit from "../../hooks/useScrollLimit";
-import styles from "../../styles/Browse.module.scss";
+import { Box } from "@mui/material";
 import type { ChildrenProvider } from "@/types";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
-const SCROLL_LIMIT: number = 80;
-
-export default function Layout({ children }: ChildrenProvider) {
-  const isScrolled: boolean = useScrollLimit(SCROLL_LIMIT);
+const Layout = ({ children }: ChildrenProvider) => {
   return (
-    <div className={styles.container}>
-      <Navbar isScrolled={isScrolled} />
-      {children}
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#141414",
+        color: "#fff",
+      }}
+    >
+      <Navbar />
+      <Box sx={{ marginLeft: "0.8rem" }}>{children}</Box>
       <Footer />
-    </div>
+    </Box>
   );
-}
+};
+
+export default Layout;
