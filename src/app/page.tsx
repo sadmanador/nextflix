@@ -1,12 +1,11 @@
 "use client";
 import Banner from "@/components/Banner/Banner";
-import Layout from "@/components/Layout/Layout";
 import Modal from "@/components/Modal/Modal";
 import { MovieSections } from "@/components/MovieSections/MovieSections";
 import { ModalContext } from "@/context/ModalContext";
 import { Section } from "@/types";
-import { useContext } from "react";
 import { Box } from "@mui/material";
+import { useContext } from "react";
 
 const Home = () => {
   const { isModal } = useContext(ModalContext);
@@ -14,28 +13,27 @@ const Home = () => {
   return (
     <>
       {isModal && <Modal />}
-      <Layout>
-        <Banner />
-        <Box
-          sx={{
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#141414",
-            color: "white",
-          }}
-        >
-          <Box sx={{ marginLeft: "0.8rem" }}>
-            {sections.map((item, index) => (
-              <MovieSections
-                key={index}
-                heading={item.heading}
-                endpoint={item.endpoint}
-              />
-            ))}
-          </Box>
+
+      <Banner />
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#141414",
+          color: "white",
+        }}
+      >
+        <Box sx={{ marginLeft: "0.8rem" }}>
+          {sections.map((item, index) => (
+            <MovieSections
+              key={index}
+              heading={item.heading}
+              endpoint={item.endpoint}
+            />
+          ))}
         </Box>
-      </Layout>
+      </Box>
     </>
   );
 };

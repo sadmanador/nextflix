@@ -1,54 +1,41 @@
 "use client";
+
+import Cards from "@/components/Cards/Cards";
 import Modal from "@/components/Modal/Modal";
-import TopMovies from "@/components/TopMovies/TopMovies";
 import { ModalContext } from "@/context/ModalContext";
-import { Media, MediaItem } from "@/types";
+import { Media } from "@/types";
 import { getMovie } from "@/utils/apiService";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 
-const MyListPage: React.FC = () => {
+const SearchPage = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
   const { isModal } = useContext(ModalContext);
   const [movies, setMovies] = useState<Media[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("my_list", movies);
-
   const loadMovies = async () => {
-    setLoading(true);
-    const favoriteItems: MediaItem[] = JSON.parse(
-      localStorage.getItem("favoriteItems") || "[]"
-    );
-
-    if (favoriteItems.length === 0) {
-      setError("No movies or TV shows found in your list.");
+    if (query) {
+      setLoading(true);
+      const res = await getMovie(
+        `/search/movie?query=${encodeURIComponent(query)}`
+      );
+      if (res.error) {
+        setError(res.error.message);
+        console.log("error from search page: ", res.error.message);
+      } else {
+        setMovies(res.data?.results || []);
+      }
       setLoading(false);
-      return;
     }
-
-    const mediaPromises = favoriteItems.map((item: MediaItem) => {
-      const endpoint =
-        item.type === "movie" ? `/movie/${item.id}` : `/tv/${item.id}`;
-      return getMovie(endpoint);
-    });
-
-    const mediaResponses = await Promise.all(mediaPromises);
-    const fetchedMedia = mediaResponses
-      .filter((response) => response && response.data)
-      .map((response) => response.data as unknown as Media);
-
-    setMovies(fetchedMedia);
-    setLoading(false);
   };
 
   useEffect(() => {
     loadMovies();
-  }, []);
-
-  const removeMovie = (id: number) => {
-    setMovies((prevMovies) => prevMovies.filter((movie) => movie.id !== id));
-  };
+  }, [query]);
 
   return (
     <>
@@ -58,7 +45,10 @@ const MyListPage: React.FC = () => {
         flexDirection="column"
         p={2}
         bgcolor="black"
-        sx={{ textTransform: "capitalize" }}
+        sx={{
+          textTransform: "capitalize",
+          marginTop: { xs: 0, sm: 2 },
+        }}
       >
         <Typography
           component="strong"
@@ -71,9 +61,8 @@ const MyListPage: React.FC = () => {
             marginBottom: ".85rem",
           }}
         >
-          My Movie List
+          Top Rated Movies
         </Typography>
-
         {loading ? (
           <Box display="flex" justifyContent="center">
             <CircularProgress color="inherit" />
@@ -83,13 +72,12 @@ const MyListPage: React.FC = () => {
         ) : (
           <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
             {movies
-              .filter((movie) => movie.poster_path !== null)
+              .filter(
+                (movie) =>
+                  movie.poster_path !== null && movie.backdrop_path !== null
+              )
               .map((movie) => (
-                <TopMovies
-                  key={movie.id}
-                  item={movie}
-                  removeMovie={removeMovie}
-                />
+                <Cards key={movie.id} item={movie} />
               ))}
           </Box>
         )}
@@ -98,4 +86,4 @@ const MyListPage: React.FC = () => {
   );
 };
 
-export default MyListPage;
+export default SearchPage;

@@ -1,3 +1,4 @@
+"use client";
 import ClearIcon from "@mui/icons-material/Clear";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -64,7 +65,10 @@ const Navbar = () => {
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter" && searchQuery.trim()) {
+      event.preventDefault();
       router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setShowClearIcon("none");
     }
   };
 

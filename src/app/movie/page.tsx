@@ -1,6 +1,5 @@
 "use client";
 import Cards from "@/components/Cards/Cards";
-import Layout from "@/components/Layout/Layout";
 import Modal from "@/components/Modal/Modal";
 import { ModalContext } from "@/context/ModalContext";
 import { Media } from "@/types";
@@ -31,7 +30,7 @@ const MoviePage: React.FC = () => {
   return (
     <>
       {isModal && <Modal />}
-      <Layout>
+
         <Box
           display="flex"
           flexDirection="column"
@@ -71,7 +70,7 @@ const MoviePage: React.FC = () => {
             </Box>
           )}
         </Box>
-      </Layout>
+
     </>
   );
 };
